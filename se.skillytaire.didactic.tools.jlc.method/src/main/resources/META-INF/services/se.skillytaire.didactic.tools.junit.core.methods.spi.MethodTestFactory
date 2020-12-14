@@ -1,0 +1,14 @@
+se.skillytaire.didactic.tools.junit.core.methods.internal.tests.signature.MethodSignatureTestFactory
+se.skillytaire.didactic.tools.junit.core.methods.internal.tests.equals.EqualsReflectiveTestFactory
+se.skillytaire.didactic.tools.junit.core.methods.internal.tests.equals.sym.EqualsSymetrixTestFactory
+se.skillytaire.didactic.tools.junit.core.methods.internal.tests.equals.trans.EqualsTransiveTestFactory
+se.skillytaire.didactic.tools.junit.core.methods.internal.tests.equals.EqualsConsistencyTestFactory
+se.skillytaire.didactic.tools.junit.core.methods.internal.tests.equals.EqualsNullTestFactory
+se.skillytaire.didactic.tools.junit.core.methods.internal.tests.equals.EqualsOtherTypeParameterTestFactory
+se.skillytaire.didactic.tools.junit.core.methods.internal.tests.equals.sanity.EqualsSanityTestFactory
+
+
+se.skillytaire.didactic.tools.junit.core.methods.internal.tests.hashcode.OverrideHashCodeTestFactory
+se.skillytaire.didactic.tools.junit.core.methods.internal.tests.hashcode.HashCodeSanityTestFactory
+se.skillytaire.didactic.tools.junit.core.methods.internal.tests.tostring.OverrideToStringTestFactory
+se.skillytaire.didactic.tools.junit.core.methods.internal.tests.tostring.OverrideToStringContentTestFactory

@@ -59,16 +59,43 @@
 				<groupId>org.junit.jupiter</groupId>
 				<artifactId>junit-jupiter-api</artifactId>
 				<version>${junit.version}</version>
-			</dependency>		
-
+			</dependency>	
+			<dependency>
+				<groupId>se.skillytaire.didactic.tools.jlc</groupId>
+				<artifactId>core</artifactId>
+				<version>${project.version}</version>
+			</dependency>	
+			<dependency>
+				<groupId>se.skillytaire.didactic.tools.jlc</groupId>
+				<artifactId>signature</artifactId>
+				<version>${project.version}</version>
+			</dependency>	
+			<dependency>
+				<groupId>se.skillytaire.didactic.tools.jlc</groupId>
+				<artifactId>constructor</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>se.skillytaire.didactic.tools.jlc</groupId>
+				<artifactId>method</artifactId>
+				<version>${project.version}</version>
+			</dependency>			
+			<dependency>
+				<groupId>se.skillytaire.didactic.tools.jlc</groupId>
+				<artifactId>lint</artifactId>
+				<version>${project.version}</version>
+			</dependency>	
 		</dependencies>
 	</dependencyManagement>
-	<!--
+
 	<modules>
 		<module>se.skillytaire.didactic.tools.jlc.core</module>
-		
+		<module>se.skillytaire.didactic.tools.jlc.signature</module>
+		<module>se.skillytaire.didactic.tools.jlc.constructor</module>
+		<module>se.skillytaire.didactic.tools.jlc.method</module>
+		<module>se.skillytaire.didactic.tools.jlc.lint</module>
 	</modules>
-	-->
+
 
 
 	<build>
