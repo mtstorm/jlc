@@ -1,5 +1,0 @@
-se.skillytaire.didactic.tools.junit.core.signature.internal.ExecutorDeclaredTestFactory
-se.skillytaire.didactic.tools.junit.core.signature.internal.FlagParameterTestFactory
-se.skillytaire.didactic.tools.junit.core.signature.internal.MethodParameterCountTestFactory
-se.skillytaire.didactic.tools.junit.core.signature.internal.OptionalParameterTestFactory
-se.skillytaire.didactic.tools.junit.core.methods.internal.tests.dbc.DBCMethodTestFactory

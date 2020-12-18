@@ -13,9 +13,9 @@ module se.skillytaire.didactic.tools.jlc.signature {
    
    provides se.skillytaire.didactic.tools.jlc.signature.spi.SignatureTestFactory 
       with 
-      se.skillytaire.didactic.tools.jlc.signature.internal.tests.dbc.DBCSignatureTestFactory,
-      se.skillytaire.didactic.tools.jlc.signature.internal.tests.ExecutorDeclaredTestFactory,
-      se.skillytaire.didactic.tools.jlc.signature.internal.tests.FlagParameterTestFactory,
-      se.skillytaire.didactic.tools.jlc.signature.internal.tests.MethodParameterCountTestFactory,
-      se.skillytaire.didactic.tools.jlc.signature.internal.tests.OptionalParameterTestFactory;
+      	se.skillytaire.didactic.tools.jlc.signature.internal.tests.dbc.DBCSignatureTestFactory,
+      	se.skillytaire.didactic.tools.jlc.signature.internal.tests.ExecutorDeclaredTestFactory,
+      	se.skillytaire.didactic.tools.jlc.signature.internal.tests.FlagParameterTestFactory,
+      	se.skillytaire.didactic.tools.jlc.signature.internal.tests.MethodParameterCountTestFactory,
+      	se.skillytaire.didactic.tools.jlc.signature.internal.tests.OptionalParameterTestFactory;
 }

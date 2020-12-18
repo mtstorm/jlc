@@ -25,6 +25,7 @@ import se.skillytaire.didactic.tools.jlc.spi.model.config.TestConfiguration;
 import se.skillytaire.didactic.tools.jlc.spi.model.config.TestOrderDescription;
 import se.skillytaire.didactic.tools.jlc.spi.model.naming.BasicDisplayName;
 import se.skillytaire.didactic.tools.jlc.spi.model.naming.DisplayName;
+import se.skillytaire.didactic.tools.jlc.spi.util.AnnotationTool;
 
 /**
  * Abstraction for repeating test extensions.
@@ -357,9 +358,9 @@ public abstract class AbstractAnnotatedTestExtention<A extends Annotation, R ext
 	 */
 	protected abstract DisplayName getDefaultDisplayName();
 
-	protected <T extends Annotation>boolean isEnabled(T annotation) {
+	protected <T extends Annotation> boolean isEnabled(T annotation) {
 		boolean isEnabled;
-		Optional<Boolean> r = getValue(annotation, ATTRIBUTE_ENABLED);
+		Optional<Boolean> r = AnnotationTool.getValue(annotation, ATTRIBUTE_ENABLED);
 		if (r.isPresent()) {
 			isEnabled = r.get();
 		} else {
@@ -368,19 +369,19 @@ public abstract class AbstractAnnotatedTestExtention<A extends Annotation, R ext
 		return isEnabled;
 	}
 
-	@SuppressWarnings("unchecked")
-	private static <T> Optional<T> getValue(Annotation annotation, String methodName) {
-		T result;
-		Method method;
-		try {
-			method = annotation.annotationType().getDeclaredMethod(methodName);
-			result = (T) method.invoke(annotation);
-		} catch (Exception e) {
-		   log.log(Level.SEVERE, String.format("Error getting the value of %s from annotation %s", methodName, annotation),e);
-			result = null;
-		}
-		return Optional.ofNullable(result);
-	}
+//	@SuppressWarnings("unchecked")
+//	private static <T> Optional<T> getValue(Annotation annotation, String methodName) {
+//		T result;
+//		Method method;
+//		try {
+//			method = annotation.annotationType().getDeclaredMethod(methodName);
+//			result = (T) method.invoke(annotation);
+//		} catch (Exception e) {
+//		   log.log(Level.SEVERE, String.format("Error getting the value of %s from annotation %s", methodName, annotation),e);
+//			result = null;
+//		}
+//		return Optional.ofNullable(result);
+//	}
 
 	/**
 	 * Checks if the repeater annotation is enabled. When there is no repeater it is

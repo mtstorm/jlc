@@ -15,6 +15,7 @@ import org.junit.jupiter.api.DynamicNode;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
+import org.junit.jupiter.api.extension.TestInstancePostProcessor;
 import org.junit.jupiter.api.function.Executable;
 
 import se.skillytaire.didactic.tools.jlc.spi.ext.feature.FeatureTestNodeFactory;
@@ -24,41 +25,34 @@ import se.skillytaire.didactic.tools.jlc.spi.model.naming.DisplayName;
 import se.skillytaire.didactic.tools.jlc.spi.model.structure.CompositeTestNode;
 import se.skillytaire.didactic.tools.jlc.spi.model.structure.JLCTestNode;
 
-public class JLCTestBuilder implements BeforeEachCallback {
-
+public class JLCTestBuilder implements BeforeEachCallback, TestInstancePostProcessor  {
+	private static JLCConfiguration<Object> CONFIGURATION;
+	@Override
+	public void postProcessTestInstance(Object testInstance, ExtensionContext context) throws Exception {
+		CONFIGURATION = new JLCConfiguration<>(testInstance);
+	}   
+	
    @Override
    public void beforeEach(ExtensionContext context) throws Exception {
-      Object testInstance = context.getTestInstance().get();
-      JLCConfiguration<Object> configuration = new JLCConfiguration<>(testInstance);
+	   Optional<Object> optionalTestInstance = context.getTestInstance();
+	   if(optionalTestInstance.isPresent()) {
+		   //autowire the instances
+		   CONFIGURATION.autowire();
+	   }
+	   
+	   
+	   //TestObjectFactories.setFields(testInstance, testInstance.getClass());
+       
+//FIXME
+//      if (configuration.isConfiguredObjectFactory()) {
+//         //System.out.println("Configuration outside SPI");
+//         TestObjectFactory<Object> objectFactory = configuration.getObjectFactory();
+//         TestObjectFactories.setFields(testInstance, testInstance.getClass(), objectFactory);
+//
+//      } else {
+//         TestObjectFactories.setFields(testInstance, testInstance.getClass());
+//      }
 
-      if (configuration.isConfiguredObjectFactory()) {
-         System.out.println("Configuration outside SPI");
-         TestObjectFactory<Object> objectFactory = configuration.getObjectFactory();
-         TestObjectFactories.setFields(testInstance, testInstance.getClass(), objectFactory);
-
-      } else {
-         TestObjectFactories.setFields(testInstance, testInstance.getClass());
-      }
-
-      // System.out.println(objectFactory.getClass());
-
-      // @this gaat misivm SPI
-
-////		if (objectFactory.getClass().isLocalClass()) {
-////			System.out.println("Local class");
-////		}
-////		if (objectFactory.getClass().isAnonymousClass()) {
-////			System.out.println("anon class");
-////		}
-//		if (objectFactory.getClass().isMemberClass() || objectFactory.getClass().isAnonymousClass()) {
-//			System.out.println("member class");
-//			// apply the internal factory having it's annotation
-//			TestObjectFactory.setFields(objectFactory, objectFactory.getClass());
-//			//TestObjectFactory.setFields(testInstance, testInstance.getClass());
-//		} else {
-//			TestObjectFactory.setFields(testInstance, testInstance.getClass());
-//		}
-      System.out.println("before");
    }
 
    public static Stream<DynamicNode> build(Object testInstance) {
@@ -141,7 +135,7 @@ public class JLCTestBuilder implements BeforeEachCallback {
     * @return
     */
    public static <T> Optional<T> getNumericInstance(Class<T> type, long value) {
-      Optional<TestObjectFactory<T>> factory = TestObjectFactories.resolveFactory(type);
+      Optional<TestObjectFactory<T>> factory =  CONFIGURATION.resolveFactory(type);
       Optional<T> result;
       if (factory.isPresent()) {
          result = factory.get().create(value);
@@ -210,4 +204,6 @@ public class JLCTestBuilder implements BeforeEachCallback {
          this.peek = peek;
       }
    }
+
+
 }

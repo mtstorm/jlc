@@ -12,9 +12,33 @@
 	<name>Core extention</name>
 	<description>The core api for JLC</description>
 	<dependencies>
-		<dependency>
-   			<groupId>org.junit.jupiter</groupId>
-    		<artifactId>junit-jupiter-api</artifactId>
+    <dependency>
+      <groupId>org.junit</groupId>
+      <artifactId>junit-bom</artifactId>
+      <version>${junit.version}</version>
+      <scope>import</scope> 
+	  <type>pom</type>
+	  <exclusions>
+	  	<exclusion>
+        <groupId>org.junit.jupiter</groupId>
+        <artifactId>junit-jupiter-migrationsupport</artifactId>
+	  	</exclusion>
+	  	<exclusion>
+	  	    <groupId>org.junit.vintage</groupId>
+        	<artifactId>junit-vintage-engine</artifactId>
+	  	</exclusion>
+	  </exclusions>
+    </dependency>
+
+		    <dependency>
+		        <groupId>org.junit.jupiter</groupId>
+		        <artifactId>junit-jupiter-api</artifactId>
+		        <scope>compile</scope>
+		    </dependency>
+			<dependency>
+				<groupId>org.junit.jupiter</groupId>
+				<artifactId>junit-jupiter</artifactId>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 </project>

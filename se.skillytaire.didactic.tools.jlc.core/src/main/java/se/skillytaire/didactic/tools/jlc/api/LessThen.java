@@ -5,6 +5,8 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+
+import se.skillytaire.didactic.tools.jlc.spi.internal.VoidTestObjectFactory;
 /**
  * Injects the instance from the factory-method
  * {@code ComparableTestObjectFactory#createLessThen()} before a custom test has run.
@@ -17,5 +19,6 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 
 public @interface LessThen {
+	Class<? extends TestObjectFactory<?>> override() default VoidTestObjectFactory.class;
 
 }

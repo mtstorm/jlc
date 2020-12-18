@@ -3,7 +3,8 @@ module se.skillytaire.didactic.tools.jlc.core {
     * Minimal dependencies for the API and the SPI.
     */
    requires java.logging;
-   requires org.junit.jupiter.api;
+   requires transitive org.junit.jupiter.api;
+  
 
    /*
     * For test users.
@@ -19,6 +20,7 @@ module se.skillytaire.didactic.tools.jlc.core {
    exports se.skillytaire.didactic.tools.jlc.spi.model.naming;
    exports se.skillytaire.didactic.tools.jlc.spi.model.structure;
 
+ //  exports se.skillytaire.didactic.tools.jlc.spi.internal;
    exports se.skillytaire.didactic.tools.jlc.spi.ext.enforcer;
    /**
     * 
@@ -50,5 +52,8 @@ module se.skillytaire.didactic.tools.jlc.core {
    se.skillytaire.didactic.tools.jlc.spi.internal.StringBuilderTestObjectFactory,
    se.skillytaire.didactic.tools.jlc.spi.internal.StringTestObjectFactory;
    
-   exports se.skillytaire.didactic.tools.jlc.spi.internal to  se.skillytaire.didactic.tools.jlc.signature;
+   exports se.skillytaire.didactic.tools.jlc.spi.internal to se.skillytaire.didactic.tools.jlc.signature;
+   
+   
+   provides org.junit.jupiter.api.extension.Extension with se.skillytaire.didactic.tools.jlc.api.JLCTestBuilder; 
 }

@@ -53,13 +53,58 @@
 		<url>https://www.linkedin.com/in/mtstorm/</url>
 		</developer>
 	 </developers>
+	 
+	<distributionManagement>
+	  <snapshotRepository>
+		<id>ossrh</id>
+		<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+	  </snapshotRepository>
+	</distributionManagement>	 
+	 
 	<dependencyManagement>
+  <dependencies>    
+    <dependency>
+      <groupId>org.junit</groupId>
+      <artifactId>junit-bom</artifactId>
+      <version>${junit.version}</version>
+      <scope>import</scope> 
+	  <type>pom</type>
+    </dependency>
+ 
+  <!--
 		<dependencies>
+		
 			<dependency>
 				<groupId>org.junit.jupiter</groupId>
 				<artifactId>junit-jupiter-api</artifactId>
 				<version>${junit.version}</version>
 			</dependency>	
+		
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-engine</artifactId>
+			<version>${junit.version}</version>
+			<scope>test</scope>
+		</dependency>
+
+<dependency>
+    <groupId>org.junit.platform</groupId>
+    <artifactId>junit-platform-commons</artifactId>
+    <version>1.7.0</version>
+</dependency>
+
+
+<dependency>
+    <groupId>org.junit.platform</groupId>
+    <artifactId>junit-platform-launcher</artifactId>
+    <version>1.7.0</version>
+    <scope>test</scope>
+</dependency>		
+		
+		
+		-->
+		
+		
 			<dependency>
 				<groupId>se.skillytaire.didactic.tools.jlc</groupId>
 				<artifactId>core</artifactId>
@@ -90,6 +135,7 @@
 
 	<modules>
 		<module>se.skillytaire.didactic.tools.jlc.core</module>
+		<module>se.skillytaire.didactic.tools.jlc.core.sample</module>
 		<module>se.skillytaire.didactic.tools.jlc.signature</module>
 		<module>se.skillytaire.didactic.tools.jlc.constructor</module>
 		<module>se.skillytaire.didactic.tools.jlc.method</module>
@@ -289,7 +335,11 @@
 						<include>**/*TestSuite.java</include>
 						<include>**/AllTests.java</include>
 					</includes>
-					<argLine>${surefireArgLine} --enable-preview</argLine>
+					<argLine>${surefireArgLine} --enable-preview --add-exports org.junit.platform.commons/org.junit.platform.commons.util=ALL-UNNAMED
+                    --add-exports org.junit.platform.commons/org.junit.platform.commons.logging=ALL-UNNAMED
+</argLine>
+					
+
 				</configuration>
 		
 	
@@ -321,19 +371,6 @@
 				</executions>
 			</plugin>
 
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-source-plugin</artifactId>
-
-				<executions>
-					<execution>
-						<id>attach-sources</id>
-						<goals>
-							<goal>jar</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-site-plugin</artifactId>
@@ -516,8 +553,82 @@
 				</executions>
 
 			</plugin>
+			
+			
+
+		
 		</plugins>
 	</build>
+<profiles>
+  <profile> 
+    <id>release</id>
+    <build>
+		<plugins>
+			<plugin>
+			  <groupId>org.sonatype.plugins</groupId>
+			  <artifactId>nexus-staging-maven-plugin</artifactId>
+			  <version>1.6.8</version>
+			  <extensions>true</extensions>
+			  <configuration>
+				<serverId>ossrh</serverId>
+				<nexusUrl>https://oss.sonatype.org/</nexusUrl>
+				<autoReleaseAfterClose>true</autoReleaseAfterClose>
+			  </configuration>
+			</plugin>	
+			<plugin>
+			  <groupId>org.apache.maven.plugins</groupId>
+			  <artifactId>maven-release-plugin</artifactId>
+			  <version>3.0.0-M1</version>
+			  <configuration>
+				<autoVersionSubmodules>true</autoVersionSubmodules>
+				<useReleaseProfile>false</useReleaseProfile>
+				<releaseProfiles>release</releaseProfiles>
+				<goals>deploy</goals>
+			  </configuration>
+			</plugin>
+			<plugin>
+			  <groupId>org.apache.maven.plugins</groupId>
+			  <artifactId>maven-gpg-plugin</artifactId>
+			  <version>1.6</version>
+			  <executions>
+				<execution>
+				  <id>sign-artifacts</id>
+				  <phase>verify</phase>
+				  <goals>
+					<goal>sign</goal>
+				  </goals>
+				</execution>
+			  </executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>		
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>attach-javadocs</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>	
+		</plugins>	
+    </build>
+  </profile>
+</profiles>	
+	
 	<reporting>
 		<plugins>
 			<plugin>
