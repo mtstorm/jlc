@@ -1,11 +1,11 @@
 package se.skillytaire.didactic.tools.jlc.method.internal;
 
+import se.skillytaire.didactic.tools.jlc.api.Archetype;
+import se.skillytaire.didactic.tools.jlc.api.ArchetypedCollection;
+import se.skillytaire.didactic.tools.jlc.api.Enforcer;
+import se.skillytaire.didactic.tools.jlc.api.JLCConfiguration;
 import se.skillytaire.didactic.tools.jlc.method.spi.model.config.TestMethodConfiguration;
 import se.skillytaire.didactic.tools.jlc.method.spi.model.config.TestMethodsConfiguration;
-import se.skillytaire.didactic.tools.jlc.spi.ext.enforcer.Enforcer;
-import se.skillytaire.didactic.tools.jlc.spi.model.Archetype;
-import se.skillytaire.didactic.tools.jlc.spi.model.config.ArchetypedCollection;
-import se.skillytaire.didactic.tools.jlc.spi.model.config.JLCConfiguration;
 
 public class MethodEnforcer<T> implements Enforcer<TestMethodConfiguration<T>,T>{
 	private static final Class<?> TYPE = TestMethodsConfiguration.class;

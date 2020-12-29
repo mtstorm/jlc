@@ -1,8 +1,8 @@
 package se.skillytaire.didactic.tools.jlc.lint.spi;
 
+import se.skillytaire.didactic.tools.jlc.api.TestConfiguration;
 import se.skillytaire.didactic.tools.jlc.lint.spi.model.config.TestLinterConfiguration;
 import se.skillytaire.didactic.tools.jlc.signature.spi.ConstructorSignature;
-import se.skillytaire.didactic.tools.jlc.spi.model.config.TestConfiguration;
 
 public abstract class AbstractLinter<T> implements Linter<T> {
 	private TestLinterConfiguration<T> testConfiguration;

@@ -9,13 +9,14 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream.Builder;
 
-import se.skillytaire.didactic.tools.jlc.spi.model.config.JLCConfiguration;
+import se.skillytaire.didactic.tools.jlc.api.JLCConfiguration;
+import se.skillytaire.didactic.tools.jlc.spi.model.config.BasicTestGroupConfiguration;
 import se.skillytaire.didactic.tools.jlc.spi.model.config.TestConfigurationNodeBuilder;
 import se.skillytaire.didactic.tools.jlc.spi.model.structure.FolderTestNode;
 import se.skillytaire.didactic.tools.jlc.spi.model.structure.JLCTestNode;
-
-public class TestMethodConfigurationNodeBuilder<T> extends TestConfigurationNodeBuilder<TestMethodConfiguration<T>,T,TestMethodGroupConfiguration>{
-	public TestMethodConfigurationNodeBuilder(TestMethodGroupConfiguration settings) {
+//FIXME BasicTestGroupConfiguration is generic now, remove param
+public class TestMethodConfigurationNodeBuilder<T> extends TestConfigurationNodeBuilder<TestMethodConfiguration<T>,T,BasicTestGroupConfiguration>{
+	public TestMethodConfigurationNodeBuilder(BasicTestGroupConfiguration settings) {
 		super(settings);
 	}
 

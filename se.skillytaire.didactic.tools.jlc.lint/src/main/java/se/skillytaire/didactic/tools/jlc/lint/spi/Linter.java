@@ -1,7 +1,7 @@
 package se.skillytaire.didactic.tools.jlc.lint.spi;
 
+import se.skillytaire.didactic.tools.jlc.api.Archetype;
 import se.skillytaire.didactic.tools.jlc.lint.spi.model.config.TestLinterConfiguration;
-import se.skillytaire.didactic.tools.jlc.spi.model.Archetype;
 
 /**
  * Linting is normally the automated checking of source code for programmatic

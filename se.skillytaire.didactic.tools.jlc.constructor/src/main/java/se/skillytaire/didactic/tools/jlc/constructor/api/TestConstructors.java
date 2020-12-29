@@ -16,7 +16,6 @@ import se.skillytaire.didactic.tools.jlc.api.TestOrder;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @Target(ElementType.TYPE)
-
 public @interface TestConstructors {
 	/**
 	 * 
@@ -27,6 +26,11 @@ public @interface TestConstructors {
     * The default value for {@link #simpleName()} is {@value true}.
     */
    public static final boolean SIMPLE_NAME = true;
+   
+   /**
+    * The default value for {@link #merge()} is {@value false}.
+    */
+   public static final boolean MERGE = false;
    /**
     * The default value for {@link #displayName()}.
     */
@@ -38,8 +42,6 @@ public @interface TestConstructors {
     */
    TestConstructor[] value() default {};
    
-
-
 	/**
 	 * Set the display name for the 'Constructors'-node . Defaults to 'Constructors'.
 	 * @return the display name for all the 'methods'-node.
@@ -54,14 +56,10 @@ public @interface TestConstructors {
     * @return
     */
    TestOrder order() default @TestOrder();
+   
    int parameterCount() default DEFAULT_PARAM_COUNT;
    
    boolean enabled() default true;
-   
-   /**
-    * @return
-    */
-   boolean merge() default false;
    
    TestGroup[] grouping() default {};
    
@@ -71,4 +69,8 @@ public @interface TestConstructors {
     * @return
     */
    boolean simpleName() default SIMPLE_NAME;
+   /**
+    * @return
+    */
+   boolean merge() default MERGE;
 }

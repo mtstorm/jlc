@@ -20,8 +20,8 @@ import se.skillytaire.didactic.tools.jlc.api.JLC;
 
 public @interface TestMethod {
    
-
    int NOT_CONFIGURED = -1;
+   
    String name();
    
    Class<?>[] parameters() default {};
@@ -58,6 +58,8 @@ public @interface TestMethod {
     * @return
     */
    Class<? extends Exception> dbc() default IllegalArgumentException.class;
+   
+   boolean disableDBC() default false;
    /**
     * Is this signature an API declared method. For instance {@code equals(Object)} is declared by Java, so specific tests like parameter count are not included.
     * @return

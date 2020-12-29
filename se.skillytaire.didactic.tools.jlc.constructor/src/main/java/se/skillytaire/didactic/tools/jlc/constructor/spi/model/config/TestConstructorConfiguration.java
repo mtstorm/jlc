@@ -7,6 +7,8 @@ import java.util.logging.Logger;
 
 import org.junit.jupiter.api.DisplayName;
 
+import se.skillytaire.didactic.tools.jlc.api.Archetype;
+import se.skillytaire.didactic.tools.jlc.api.JLCConfiguration;
 import se.skillytaire.didactic.tools.jlc.constructor.api.TestConstructor;
 import se.skillytaire.didactic.tools.jlc.constructor.api.TestConstructors;
 import se.skillytaire.didactic.tools.jlc.constructor.spi.util.ConstructorTool;
@@ -14,8 +16,6 @@ import se.skillytaire.didactic.tools.jlc.constructor.spi.util.TestConstructorAnn
 import se.skillytaire.didactic.tools.jlc.signature.spi.ConstructorSignature;
 import se.skillytaire.didactic.tools.jlc.signature.spi.MethodSignature;
 import se.skillytaire.didactic.tools.jlc.signature.spi.model.config.AbstractTestSignatureConfiguration;
-import se.skillytaire.didactic.tools.jlc.spi.model.Archetype;
-import se.skillytaire.didactic.tools.jlc.spi.model.config.JLCConfiguration;
 
 public class TestConstructorConfiguration<T> extends AbstractTestSignatureConfiguration<TestConstructorConfiguration<T>,T,ConstructorSignature<T>, Constructor<T>> {
 

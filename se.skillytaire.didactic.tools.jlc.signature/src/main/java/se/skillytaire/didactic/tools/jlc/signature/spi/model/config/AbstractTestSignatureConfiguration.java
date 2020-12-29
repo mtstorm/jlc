@@ -5,13 +5,18 @@ import java.lang.reflect.Modifier;
 import java.net.URI;
 import java.util.Optional;
 
+import se.skillytaire.didactic.tools.jlc.api.JLCConfiguration;
 import se.skillytaire.didactic.tools.jlc.signature.spi.Signature;
 import se.skillytaire.didactic.tools.jlc.signature.spi.model.naming.SignatureDisplayName;
 import se.skillytaire.didactic.tools.jlc.spi.model.config.AbstractTestConfiguration;
-import se.skillytaire.didactic.tools.jlc.spi.model.config.JLCConfiguration;
-import se.skillytaire.didactic.tools.jlc.spi.model.naming.BasicDisplayName;
-import se.skillytaire.didactic.tools.jlc.spi.model.naming.DisplayName;
-
+/**
+ * An abstraction to be reused 
+ *
+ * @param <N>
+ * @param <T>
+ * @param <S>
+ * @param <E>
+ */
 public abstract class AbstractTestSignatureConfiguration<N extends AbstractTestSignatureConfiguration<N,T, S,E>, T, S extends Signature, E extends Executable>
 		extends AbstractTestConfiguration<N,T> implements TestSignatureConfiguration<N,T, S,E> {
 
@@ -26,8 +31,6 @@ public abstract class AbstractTestSignatureConfiguration<N extends AbstractTestS
 	private boolean simpleName;
 	
 	private boolean dbcEnabled;
-
-
 
 	protected AbstractTestSignatureConfiguration(JLCConfiguration<T> parent, S message) {
 		super(parent);
@@ -50,11 +53,11 @@ public abstract class AbstractTestSignatureConfiguration<N extends AbstractTestS
 	public final void setMaximalParameterCount(int maximalParameterCount) {
 		this.maximalParameterCount = maximalParameterCount;
 	}
-	public boolean isSimpleName() {
+	public final boolean isSimpleName() {
 		return simpleName;
 	}
 
-	public void setSimpleName(boolean simpleName) {
+	public final void setSimpleName(boolean simpleName) {
 		this.simpleName = simpleName;
 	}
 	public final void setNullCheck(Class<? extends Exception> nullCheck) {
@@ -114,14 +117,14 @@ public abstract class AbstractTestSignatureConfiguration<N extends AbstractTestS
 	}
 
 	@Override
-	public final DisplayName getDisplayName() {
-		DisplayName displayName;
+	public final String getName() {
+		String displayName;
 		if(hasDisplayNameValue()) {
-			displayName = new BasicDisplayName(getDisplayNameValue());
+			displayName = getDisplayNameValue();
 		}else {
 			SignatureDisplayName result = new SignatureDisplayName(getSignature());
 			result.setShortSignature(isSimpleName());
-			displayName = result;
+			displayName = result.value();
 		}
 
 		return displayName;
@@ -132,6 +135,7 @@ public abstract class AbstractTestSignatureConfiguration<N extends AbstractTestS
 		Optional<Class<?>> declaringClass = declaringClass();
 		if (declaringClass.isPresent()) {
 			Class<?> type = declaringClass.get();
+			//FIXME method URI builder creation
 			uri = this.getSignature().toUri(type);
 			//System.out.println("Signature URI -> "+ uri);
 		} 

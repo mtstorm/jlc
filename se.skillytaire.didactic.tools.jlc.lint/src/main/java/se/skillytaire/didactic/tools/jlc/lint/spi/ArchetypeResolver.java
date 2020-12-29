@@ -5,7 +5,7 @@ import java.util.ServiceLoader;
 import java.util.stream.Stream;
 import java.util.stream.Stream.Builder;
 
-import se.skillytaire.didactic.tools.jlc.spi.model.Archetype;
+import se.skillytaire.didactic.tools.jlc.api.Archetype;
 
 public interface ArchetypeResolver<T> {
 	Optional<Archetype> resolve(Class<?> testClass, Class<T> beanUnderTest);

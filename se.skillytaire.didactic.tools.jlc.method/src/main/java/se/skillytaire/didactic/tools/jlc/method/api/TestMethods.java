@@ -8,6 +8,7 @@ import java.lang.annotation.Target;
 
 import org.junit.jupiter.api.DisplayName;
 
+import se.skillytaire.didactic.tools.jlc.api.TestGroup;
 import se.skillytaire.didactic.tools.jlc.api.TestOrder;
 
 @Retention(RetentionPolicy.RUNTIME)
@@ -23,7 +24,15 @@ public @interface TestMethods {
 	 * 
 	 */
    public static final int DEFAULT_PARAM_COUNT = 2;
+   /**
+    * The default value for {@link #simpleName()} is {@value true}.
+    */
+   public static final boolean SIMPLE_NAME = true;
    
+   /**
+    * The default value for {@link #merge()} is {@value false}.
+    */
+   public static final boolean MERGE = false;
    public static final String METHODS = "Methods";
    /**
     * When there are no test methods declared, 
@@ -31,22 +40,21 @@ public @interface TestMethods {
     * @return
     */
    TestMethod[] value() default {};
+   /**
+    * Set the display name for the 'methods'-node . Defaults to 'Methods'.
+    * @return the display name for all the 'methods'-node.
+    * @see #METHODS
+    */	
+   
+   DisplayName displayName() default @DisplayName(METHODS);
    
    String excludePattern() default  DEFAULT_EXCLUDE_PATTERN ;
 
-	/**
-	 * Set the display name for the 'methods'-node . Defaults to 'Methods'.
-	 * @return the display name for all the 'methods'-node.
-	 * @see #METHODS
-	 */	
-
-   DisplayName displayName() default @DisplayName(METHODS);
    /**
     * The order of methods in the ui.
     * @return
     */
    TestOrder order() default @TestOrder();
-   
    
    int parameterCount() default DEFAULT_PARAM_COUNT;
    
@@ -59,8 +67,14 @@ public @interface TestMethods {
     * 
     * @return
     */
-   TestMethodGroup[] grouping() default {};
+   TestGroup[] grouping() default {};
    
+   /**
+    * Should the display name for the constructor signature be simple or qualified.
+    * Meaning should the name of the constructor and the possible types of the parameter be simple of qualified.
+    * @return
+    */
+   boolean simpleName() default SIMPLE_NAME;
    
    /**
     * When there is no value the system will auto scan the methods.
@@ -70,5 +84,5 @@ public @interface TestMethods {
     * 
     * @return
     */
-   boolean merge() default false;
+   boolean merge() default MERGE;
 }

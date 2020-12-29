@@ -3,20 +3,20 @@ package se.skillytaire.didactic.tools.jlc.lint.internal;
 import java.util.logging.Logger;
 import java.util.stream.Stream;
 
+import se.skillytaire.didactic.tools.jlc.api.Archetype;
+import se.skillytaire.didactic.tools.jlc.api.JLCConfiguration;
 import se.skillytaire.didactic.tools.jlc.lint.api.Lint;
 import se.skillytaire.didactic.tools.jlc.lint.api.Lints;
 import se.skillytaire.didactic.tools.jlc.lint.spi.ArchetypeResolver;
 import se.skillytaire.didactic.tools.jlc.lint.spi.model.config.TestLinterConfiguration;
 import se.skillytaire.didactic.tools.jlc.lint.spi.model.structure.LintTestNode;
 import se.skillytaire.didactic.tools.jlc.spi.ext.feature.JLCFeatereTestNode;
-import se.skillytaire.didactic.tools.jlc.spi.model.Archetype;
-import se.skillytaire.didactic.tools.jlc.spi.model.config.JLCConfiguration;
 import se.skillytaire.didactic.tools.jlc.spi.model.naming.BasicDisplayName;
 import se.skillytaire.didactic.tools.jlc.spi.model.naming.DisplayName;
-import se.skillytaire.didactic.tools.jlc.spi.model.structure.AbstractAnnotatedTestExtention;
+import se.skillytaire.didactic.tools.jlc.spi.model.structure.AbstractRepeatableAnnotatedTestExtention;
 
 public class TestLintersConfiguration<T>
-		extends AbstractAnnotatedTestExtention<Lint, Lints, T, TestLinterConfiguration<T>>
+		extends AbstractRepeatableAnnotatedTestExtention<Lint, Lints, T, TestLinterConfiguration<T>>
 		implements JLCFeatereTestNode<T> {
 	private static final Logger log = Logger.getLogger(TestLintersConfiguration.class.getName());
 

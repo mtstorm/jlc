@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.Optional;
 import java.util.ServiceLoader;
 
+import se.skillytaire.didactic.tools.jlc.api.Archetype;
 import se.skillytaire.didactic.tools.jlc.lint.spi.model.config.TestLinterConfiguration;
-import se.skillytaire.didactic.tools.jlc.spi.model.Archetype;
 import se.skillytaire.didactic.tools.jlc.spi.model.structure.JLCTestNode;
 
 public interface LinterFactory<T> {

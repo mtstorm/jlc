@@ -5,12 +5,12 @@ import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Assertions;
 
+import se.skillytaire.didactic.tools.jlc.api.Archetype;
+import se.skillytaire.didactic.tools.jlc.api.JLCConfiguration;
 import se.skillytaire.didactic.tools.jlc.lint.spi.Linter;
 import se.skillytaire.didactic.tools.jlc.lint.spi.LinterFactory;
 import se.skillytaire.didactic.tools.jlc.lint.spi.model.config.TestLinterConfiguration;
 import se.skillytaire.didactic.tools.jlc.spi.ext.feature.FeatureTestNodeFactory;
-import se.skillytaire.didactic.tools.jlc.spi.model.Archetype;
-import se.skillytaire.didactic.tools.jlc.spi.model.config.JLCConfiguration;
 import se.skillytaire.didactic.tools.jlc.spi.model.structure.AbstractConfigurationTestNode;
 /**
  * Already filtered node
@@ -34,7 +34,7 @@ public final class LintTestNode<T> extends AbstractConfigurationTestNode<T, Test
 			Linter<T> linter = optionalLinter.get();
 			
 			linter.enforce(getTestConfiguration());
-			Stream<FeatureTestNodeFactory<T>> structure = FeatureTestNodeFactory.factories(f -> f.isRerunnable());
+			Stream<FeatureTestNodeFactory<T>> structure = FeatureTestNodeFactory.factories(configuration);
 			// structure.forEach(System.out::println); 
 //			 System.out.println(structure.count());
 			structure

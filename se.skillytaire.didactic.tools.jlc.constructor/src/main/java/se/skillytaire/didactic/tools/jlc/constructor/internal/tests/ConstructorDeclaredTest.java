@@ -24,7 +24,7 @@ public class ConstructorDeclaredTest<T> extends AbstractSingleConstructorTestNod
 
 	@Override
 	public void execute() throws Throwable {
-		assertTrue( getTestConfiguration().hasExecutor(),getAssertMessage());
+		assertTrue(getTestConfiguration().hasExecutor(), getAssertMessage());
 	}
 
 }

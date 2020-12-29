@@ -20,7 +20,6 @@ import se.skillytaire.didactic.tools.jlc.api.JLC;
 
 public @interface TestConstructor {
    
-
    int NOT_CONFIGURED = -1;
    
    Class<?>[] parameters() default {};
@@ -31,15 +30,10 @@ public @interface TestConstructor {
     * @return
     */
    boolean invert() default false;
-   /**
-    * Get the return type of the method. Defaults to 'void'.
-    * @return the return type of the method
-    */
-   Class<?> returnType() default void.class;
    
    /** Add an extra feature to the display.
     * Remember to enable the {@link TestConstructors#grouping()}
-    * having {@link TestConstructorGroup#Feature} or {@link TestConstructorGroup#ALL}.
+    * having {@link TestConstructorGroup#Feature} or {@link TestConstructorGroup#All}.
     */
    String feature() default "";
    /** Display a short version of the signature, defaults to true, so not showing the fqmn (Full Qualified Method Name) */
@@ -47,7 +41,7 @@ public @interface TestConstructor {
    /**
     * Allows you to add the constructor to an archetype.
     * Remember to enable the {@link TestConstructors#grouping()}
-    * having {@link TestConstructorGroup#Archetype} or {@link TestConstructorGroup#ALL}.
+    * having {@link TestConstructorGroup#Archetype} or {@link TestConstructorGroup#All}.
     * @return
     */
    String archetype() default "";

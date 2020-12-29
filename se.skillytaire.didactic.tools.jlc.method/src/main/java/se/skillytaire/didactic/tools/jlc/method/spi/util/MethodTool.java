@@ -9,9 +9,9 @@ import java.util.function.Predicate;
 import java.util.logging.Logger;
 import java.util.stream.Stream;
 
+import se.skillytaire.didactic.tools.jlc.api.JLCConfiguration;
 import se.skillytaire.didactic.tools.jlc.method.spi.model.config.TestMethodConfiguration;
 import se.skillytaire.didactic.tools.jlc.signature.spi.MethodSignature;
-import se.skillytaire.didactic.tools.jlc.spi.model.config.JLCConfiguration;
 
 public class MethodTool {
    private static final Logger log = Logger.getLogger(MethodTool.class.getName());

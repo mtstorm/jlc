@@ -2,9 +2,10 @@ package se.skillytaire.didactic.tools.jlc.method.spi.model.config;
 
 import java.util.stream.Stream;
 
+import se.skillytaire.didactic.tools.jlc.api.JLCConfiguration;
 import se.skillytaire.didactic.tools.jlc.method.spi.MethodTestFactory;
 import se.skillytaire.didactic.tools.jlc.signature.spi.model.naming.SignatureDisplayName;
-import se.skillytaire.didactic.tools.jlc.spi.model.config.JLCConfiguration;
+import se.skillytaire.didactic.tools.jlc.spi.model.naming.BasicDisplayName;
 import se.skillytaire.didactic.tools.jlc.spi.model.naming.DisplayName;
 import se.skillytaire.didactic.tools.jlc.spi.model.structure.AbstractConfigurationTestNode;
 import se.skillytaire.didactic.tools.jlc.spi.model.structure.JLCTestNode;
@@ -31,7 +32,11 @@ public class TestMethodConfigurationTestSPINode <T> extends AbstractConfiguratio
 	
 	@Override
 	public DisplayName getDisplayName() {
-		return new SignatureDisplayName(getTestConfiguration().getSignature());
+//		
+//		SignatureDisplayName dn = new SignatureDisplayName(getTestConfiguration().getSignature());
+//
+//		return ;
+		return new BasicDisplayName(getTestConfiguration().getName());
 	}
 
 	

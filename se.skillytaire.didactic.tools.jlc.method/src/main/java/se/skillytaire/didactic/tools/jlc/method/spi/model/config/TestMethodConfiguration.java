@@ -4,13 +4,15 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Optional;
 
+import se.skillytaire.didactic.tools.jlc.api.Archetype;
+import se.skillytaire.didactic.tools.jlc.api.JLCConfiguration;
 import se.skillytaire.didactic.tools.jlc.method.api.TestMethod;
 import se.skillytaire.didactic.tools.jlc.method.api.TestMethods;
 import se.skillytaire.didactic.tools.jlc.method.spi.util.MethodTool;
 import se.skillytaire.didactic.tools.jlc.signature.spi.MethodSignature;
 import se.skillytaire.didactic.tools.jlc.signature.spi.model.config.AbstractTestSignatureConfiguration;
-import se.skillytaire.didactic.tools.jlc.spi.model.Archetype;
-import se.skillytaire.didactic.tools.jlc.spi.model.config.JLCConfiguration;
+
+
 
 public class TestMethodConfiguration<T> extends AbstractTestSignatureConfiguration<TestMethodConfiguration<T>,T, MethodSignature, Method>
 		 {
@@ -36,6 +38,7 @@ public class TestMethodConfiguration<T> extends AbstractTestSignatureConfigurati
 		this(parent, message, IllegalArgumentException.class);
 	}
 
+	
 	public TestMethodConfiguration(JLCConfiguration<T> parent, MethodSignature message,
 			Class<? extends Exception> nullCheck) {
 		super(parent, message, nullCheck);
@@ -135,6 +138,7 @@ public class TestMethodConfiguration<T> extends AbstractTestSignatureConfigurati
 		setEnforced(true);
 		setDeclared(true);
 		setEnabled(testMethod.enabled());
+		setDbcEnabled(!testMethod.disableDBC());
 	}
 
 

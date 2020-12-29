@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+	<modelVersion>4.0.0</modelVersion>
+	
+	<parent>
+		<groupId>se.skillytaire.didactic.tools.jlc</groupId>
+		<artifactId>root</artifactId>
+		<version>1.0-SNAPSHOT</version>
+	</parent>
+
+	
+	
+	<artifactId>bom</artifactId>
+	<version>1.0-SNAPSHOT</version>
+
+	<packaging>pom</packaging>
+	<name>JLC (Bill of Materials)</name>
+	<description>This Bill of Materials POM can be used to ease dependency management when referencing multiple JLC artifacts using Gradle or Maven.</description>
+
+	<licenses>
+		<license>
+			<name>Eclipse Public License v2.0</name>
+			<url>https://www.eclipse.org/legal/epl-v20.html</url>
+		</license>
+	</licenses>
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.junit</groupId>
+				<artifactId>junit-bom</artifactId>
+				<version>${junit.version}</version>
+				<scope>import</scope>
+				<type>pom</type>
+				<exclusions>
+					<exclusion>
+						<groupId>org.junit.jupiter</groupId>
+						<artifactId>junit-jupiter-migrationsupport</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>org.junit.vintage</groupId>
+						<artifactId>junit-vintage-engine</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>		
+			<dependency>
+				<groupId>se.skillytaire.didactic.tools.jlc</groupId>
+				<artifactId>api</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>se.skillytaire.didactic.tools.jlc</groupId>
+				<artifactId>spi</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>se.skillytaire.didactic.tools.jlc</groupId>
+				<artifactId>factory.java.lang</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>se.skillytaire.didactic.tools.jlc</groupId>
+				<artifactId>signature</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>se.skillytaire.didactic.tools.jlc</groupId>
+				<artifactId>constructor</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>se.skillytaire.didactic.tools.jlc</groupId>
+				<artifactId>method</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>se.skillytaire.didactic.tools.jlc</groupId>
+				<artifactId>lint</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>se.skillytaire.didactic.tools.jlc</groupId>
+				<artifactId>property</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>se.skillytaire.didactic.tools.jlc</groupId>
+				<artifactId>javabean</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+
+
+			<!-- https://mvnrepository.com/artifact/net.jcip/jcip-annotations -->
+			<dependency>
+				<groupId>net.jcip</groupId>
+				<artifactId>jcip-annotations</artifactId>
+				<version>1.0</version>
+			</dependency>
+			<!-- https://mvnrepository.com/artifact/com.github.stephenc.jcip/jcip-annotations -->
+			<dependency>
+				<groupId>com.github.stephenc.jcip</groupId>
+				<artifactId>jcip-annotations</artifactId>
+				<version>1.0-1</version>
+			</dependency>
+
+
+		</dependencies>
+	</dependencyManagement>
+
+</project>

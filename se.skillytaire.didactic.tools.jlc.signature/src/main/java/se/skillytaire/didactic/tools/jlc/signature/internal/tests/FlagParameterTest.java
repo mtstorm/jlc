@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Assertions;
 
 import se.skillytaire.didactic.tools.jlc.signature.spi.Signature;
 import se.skillytaire.didactic.tools.jlc.signature.spi.model.config.TestSignatureConfiguration;
-import se.skillytaire.didactic.tools.jlc.spi.internal.BooleanTestObjectFactory;
+import se.skillytaire.didactic.tools.jlc.spi.BooleanTestObjectFactory;
 import se.skillytaire.didactic.tools.jlc.spi.model.naming.BasicDisplayName;
 import se.skillytaire.didactic.tools.jlc.spi.model.naming.DisplayName;
 

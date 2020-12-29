@@ -1,9 +1,9 @@
 package se.skillytaire.didactic.tools.jlc.method.internal.tests.signature;
 
+import se.skillytaire.didactic.tools.jlc.api.JLCConfiguration;
 import se.skillytaire.didactic.tools.jlc.method.spi.model.config.AbstractTestMethodConfigurationTestNode;
 import se.skillytaire.didactic.tools.jlc.method.spi.model.config.TestMethodConfiguration;
 import se.skillytaire.didactic.tools.jlc.signature.spi.SignatureTestFactory;
-import se.skillytaire.didactic.tools.jlc.spi.model.config.JLCConfiguration;
 import se.skillytaire.didactic.tools.jlc.spi.model.naming.BasicDisplayName;
 import se.skillytaire.didactic.tools.jlc.spi.model.naming.DisplayName;
 

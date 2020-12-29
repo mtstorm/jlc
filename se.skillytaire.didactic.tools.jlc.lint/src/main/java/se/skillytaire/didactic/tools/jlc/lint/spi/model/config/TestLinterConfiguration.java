@@ -3,11 +3,9 @@ package se.skillytaire.didactic.tools.jlc.lint.spi.model.config;
 import java.net.URI;
 import java.util.Optional;
 
-import se.skillytaire.didactic.tools.jlc.spi.model.Archetype;
+import se.skillytaire.didactic.tools.jlc.api.Archetype;
+import se.skillytaire.didactic.tools.jlc.api.JLCConfiguration;
 import se.skillytaire.didactic.tools.jlc.spi.model.config.AbstractTestConfiguration;
-import se.skillytaire.didactic.tools.jlc.spi.model.config.JLCConfiguration;
-import se.skillytaire.didactic.tools.jlc.spi.model.naming.BasicDisplayName;
-import se.skillytaire.didactic.tools.jlc.spi.model.naming.DisplayName;
 
 public class TestLinterConfiguration<T> extends AbstractTestConfiguration<TestLinterConfiguration<T>,T> implements Comparable<TestLinterConfiguration<T>>{
 	
@@ -18,14 +16,14 @@ public class TestLinterConfiguration<T> extends AbstractTestConfiguration<TestLi
 	}
 
 	@Override
-	public DisplayName getDisplayName() {
+	public String getName() {
 		String value;
 		if(hasDisplayNameValue()) {
 			value = getDisplayNameValue() +" ("+getArchetype().getName()+")";
 		}else {
 			value = getArchetype().getName();
 		}
-		return new BasicDisplayName(value);
+		return value;
 	}
 
 	@Override

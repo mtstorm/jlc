@@ -7,7 +7,7 @@ import java.util.Spliterators;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-import se.skillytaire.didactic.tools.jlc.api.TestObjectFactories;
+import se.skillytaire.didactic.tools.jlc.api.JLCConfiguration;
 import se.skillytaire.didactic.tools.jlc.signature.spi.Signature;
 
 public class ArrayPermutation implements Iterator< Object[] > {
@@ -17,10 +17,10 @@ public class ArrayPermutation implements Iterator< Object[] > {
 
    private int counter;
    private final Class<?>[] parameterTypes;
-   ArrayPermutation(Signature signature){
+   ArrayPermutation(JLCConfiguration<?> configuration, Signature signature){
     //  System.out.println("permutation "+ signature);
       parameterTypes = signature.getParameterTypes();
-      instance = Arrays.stream(parameterTypes).map(c -> TestObjectFactories.getThisInstance(c)).toArray();
+      instance = Arrays.stream(parameterTypes).map(c -> configuration.getThisInstance(c)).toArray();
       int elementCount = (int) Arrays.stream(parameterTypes).filter( c-> !c.isPrimitive()).count();
       if(elementCount == 0) {
          size = 0;
@@ -62,8 +62,10 @@ public class ArrayPermutation implements Iterator< Object[] > {
    int getSize() {
       return size;
    }
-   public static Stream<Object[]> asStream(Signature signature){
-      ArrayPermutation iterator = new ArrayPermutation(signature);
+   
+   
+   public static Stream<Object[]> asStream(JLCConfiguration<?> configuration,Signature signature){
+      ArrayPermutation iterator = new ArrayPermutation(configuration,signature);
       Stream<Object[]> stream = StreamSupport.stream(
             Spliterators.spliterator(iterator, iterator.getSize(), Spliterator.ORDERED)
             , false);

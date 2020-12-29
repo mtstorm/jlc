@@ -29,7 +29,6 @@ public class NoArgumentInvokeTest<T> extends AbstractSingleConstructorTestNode<T
 		}catch(Throwable e) {
 			fail(getAssertMessage(), e);
 		}
-		
 	}
 
 }

@@ -2,10 +2,10 @@ package se.skillytaire.didactic.tools.jlc.constructor.spi.model.structure;
 
 import java.util.stream.Stream;
 
+import se.skillytaire.didactic.tools.jlc.api.JLCConfiguration;
 import se.skillytaire.didactic.tools.jlc.constructor.spi.ConstructorTestFactory;
 import se.skillytaire.didactic.tools.jlc.constructor.spi.model.config.TestConstructorConfiguration;
 import se.skillytaire.didactic.tools.jlc.signature.spi.model.naming.SignatureDisplayName;
-import se.skillytaire.didactic.tools.jlc.spi.model.config.JLCConfiguration;
 import se.skillytaire.didactic.tools.jlc.spi.model.naming.BasicDisplayName;
 import se.skillytaire.didactic.tools.jlc.spi.model.naming.DisplayName;
 import se.skillytaire.didactic.tools.jlc.spi.model.structure.AbstractConfigurationTestNode;

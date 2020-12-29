@@ -1,0 +1,22 @@
+package se.skillytaire.didactic.tools.jlc.api;
+
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+/**
+ * Injects the instance from the factory-method
+ * {@code ComparableTestObjectFactory#createLessThen()} before a custom test has run.
+ * 
+ * @author Skillytaire
+ *
+ */
+@Retention(RetentionPolicy.RUNTIME)
+@Documented
+@Target(ElementType.FIELD)
+
+public @interface LessThen {
+	Class<? extends TestObjectFactory<?>> override() default VoidTestObjectFactory.class;
+
+}

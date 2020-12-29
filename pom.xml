@@ -44,6 +44,7 @@
 		<distribution>repo</distribution>
 		</license>
   </licenses>
+  
   <developers>
 		<developer>
 		<id>mtstorm</id>
@@ -55,66 +56,50 @@
 	 </developers>
 	 
 	<distributionManagement>
+		<site>
+		  <id>website</id>
+		  <url>scp://www.skillytaire.org/projects/jlc</url>
+		</site>	
 	  <snapshotRepository>
 		<id>ossrh</id>
 		<url>https://oss.sonatype.org/content/repositories/snapshots</url>
 	  </snapshotRepository>
 	</distributionManagement>	 
-	 
+
 	<dependencyManagement>
-  <dependencies>    
-    <dependency>
-      <groupId>org.junit</groupId>
-      <artifactId>junit-bom</artifactId>
-      <version>${junit.version}</version>
-      <scope>import</scope> 
-	  <type>pom</type>
-    </dependency>
- 
-  <!--
 		<dependencies>
-		
 			<dependency>
-				<groupId>org.junit.jupiter</groupId>
-				<artifactId>junit-jupiter-api</artifactId>
+				<groupId>org.junit</groupId>
+				<artifactId>junit-bom</artifactId>
 				<version>${junit.version}</version>
-			</dependency>	
-		
-		<dependency>
-			<groupId>org.junit.jupiter</groupId>
-			<artifactId>junit-jupiter-engine</artifactId>
-			<version>${junit.version}</version>
-			<scope>test</scope>
-		</dependency>
-
-<dependency>
-    <groupId>org.junit.platform</groupId>
-    <artifactId>junit-platform-commons</artifactId>
-    <version>1.7.0</version>
-</dependency>
-
-
-<dependency>
-    <groupId>org.junit.platform</groupId>
-    <artifactId>junit-platform-launcher</artifactId>
-    <version>1.7.0</version>
-    <scope>test</scope>
-</dependency>		
-		
-		
-		-->
-		
-		
+				<scope>import</scope>
+				<type>pom</type>
+				<exclusions>
+					<exclusion>
+						<groupId>org.junit.jupiter</groupId>
+						<artifactId>junit-jupiter-migrationsupport</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>org.junit.vintage</groupId>
+						<artifactId>junit-vintage-engine</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>		
 			<dependency>
 				<groupId>se.skillytaire.didactic.tools.jlc</groupId>
-				<artifactId>core</artifactId>
+				<artifactId>api</artifactId>
 				<version>${project.version}</version>
-			</dependency>	
+			</dependency>
+			<dependency>
+				<groupId>se.skillytaire.didactic.tools.jlc</groupId>
+				<artifactId>spi</artifactId>
+				<version>${project.version}</version>
+			</dependency>
 			<dependency>
 				<groupId>se.skillytaire.didactic.tools.jlc</groupId>
 				<artifactId>signature</artifactId>
 				<version>${project.version}</version>
-			</dependency>	
+			</dependency>
 			<dependency>
 				<groupId>se.skillytaire.didactic.tools.jlc</groupId>
 				<artifactId>constructor</artifactId>
@@ -124,22 +109,71 @@
 				<groupId>se.skillytaire.didactic.tools.jlc</groupId>
 				<artifactId>method</artifactId>
 				<version>${project.version}</version>
-			</dependency>			
+			</dependency>
 			<dependency>
 				<groupId>se.skillytaire.didactic.tools.jlc</groupId>
 				<artifactId>lint</artifactId>
 				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>se.skillytaire.didactic.tools.jlc</groupId>
+				<artifactId>javabean</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+
+
+
+			<!-- https://mvnrepository.com/artifact/net.jcip/jcip-annotations -->
+			<dependency>
+				<groupId>net.jcip</groupId>
+				<artifactId>jcip-annotations</artifactId>
+				<version>1.0</version>
+			</dependency>
+			<!-- https://mvnrepository.com/artifact/com.github.stephenc.jcip/jcip-annotations -->
+			<dependency>
+				<groupId>com.github.stephenc.jcip</groupId>
+				<artifactId>jcip-annotations</artifactId>
+				<version>1.0-1</version>
 			</dependency>	
 		</dependencies>
-	</dependencyManagement>
+   </dependencyManagement>
+ 
+
+		
+		
 
 	<modules>
+		
+		
+		<module>se.skillytaire.didactic.tools.jlc.api</module>
+		<module>se.skillytaire.didactic.tools.jlc.spi</module>
+		
+		<module>se.skillytaire.didactic.tools.jlc.factory.java.lang</module>
+		
+		<module>se.skillytaire.didactic.tools.jlc.signature</module>
+		<module>se.skillytaire.didactic.tools.jlc.constructor</module>
+		<module>se.skillytaire.didactic.tools.jlc.method</module>
+		<module>se.skillytaire.didactic.tools.jlc.lint</module>
+		<module>se.skillytaire.didactic.tools.jlc.property</module>
+		<module>se.skillytaire.didactic.tools.jlc.javabean</module>
+		
+		<!-- extention modules for other API's -->
+		<module>se.skillytaire.didactic.tools.jlc.jcip.annotations</module>
+		
+		<!-- Bill of materials -->
+		<module>se.skillytaire.didactic.tools.jlc.bom</module>
+		<!-- eclipse runs this, maven does not unable to load the provider for the config
+		
+		
+		-->
+	<!--
 		<module>se.skillytaire.didactic.tools.jlc.core</module>
 		<module>se.skillytaire.didactic.tools.jlc.core.sample</module>
 		<module>se.skillytaire.didactic.tools.jlc.signature</module>
 		<module>se.skillytaire.didactic.tools.jlc.constructor</module>
 		<module>se.skillytaire.didactic.tools.jlc.method</module>
 		<module>se.skillytaire.didactic.tools.jlc.lint</module>
+		-->
 	</modules>
 
 
@@ -328,6 +362,7 @@
  
 				<configuration>
 					<skipTests>${skipUnitTests}</skipTests>
+
 					<includes>
 						<include>**/Test*.java</include>
 						<include>**/*Test.java</include>

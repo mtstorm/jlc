@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>se.skillytaire.didactic.tools.jlc</groupId>
+		<artifactId>root</artifactId>
+		<version>1.0-SNAPSHOT</version>
+	</parent>
+	<artifactId>jcip-annotations</artifactId>
+	<name>JCIP-annotations support</name>
+	<description>jcip-annotations</description>
+	<dependencies>
+		<dependency>
+			<groupId>org.junit</groupId>
+			<artifactId>junit-bom</artifactId>
+			<version>${junit.version}</version>
+			<scope>import</scope>
+			<type>pom</type>
+			<exclusions>
+				<exclusion>
+					<groupId>org.junit.jupiter</groupId>
+					<artifactId>junit-jupiter-migrationsupport</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.junit.vintage</groupId>
+					<artifactId>junit-vintage-engine</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<dependency>
+			<groupId>se.skillytaire.didactic.tools.jlc</groupId>
+			<artifactId>spi</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>net.jcip</groupId>
+			<artifactId>jcip-annotations</artifactId>
+		</dependency>
+		<!--  
+		<dependency>
+			<groupId>com.github.stephenc.jcip</groupId>
+			<artifactId>jcip-annotations</artifactId>
+		</dependency>
+		-->
+	</dependencies>
+</project>

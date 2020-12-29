@@ -1,15 +1,16 @@
 module se.skillytaire.didactic.tools.jlc.constructor {
-   requires transitive se.skillytaire.didactic.tools.jlc.core;
+   requires transitive se.skillytaire.didactic.tools.jlc.spi;
+   requires transitive org.junit.jupiter.api;
    requires se.skillytaire.didactic.tools.jlc.signature;
    requires java.logging;
-   requires transitive org.junit.jupiter.api;
+   requires se.skillytaire.didactic.tools.jlc.api;
    exports se.skillytaire.didactic.tools.jlc.constructor.api;
    exports se.skillytaire.didactic.tools.jlc.constructor.spi;
    exports se.skillytaire.didactic.tools.jlc.constructor.spi.model.config;
    exports se.skillytaire.didactic.tools.jlc.constructor.spi.model.structure;
    exports se.skillytaire.didactic.tools.jlc.constructor.spi.util;
    
-   provides se.skillytaire.didactic.tools.jlc.spi.ext.enforcer.Enforcer 
+   provides se.skillytaire.didactic.tools.jlc.api.Enforcer 
       with se.skillytaire.didactic.tools.jlc.constructor.internal.ConstructorSignatureEnforcer;
 
    provides se.skillytaire.didactic.tools.jlc.spi.ext.feature.FeatureTestNodeFactory 

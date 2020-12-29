@@ -4,8 +4,8 @@ import java.lang.reflect.Executable;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Optional;
 
+import se.skillytaire.didactic.tools.jlc.api.TestConfiguration;
 import se.skillytaire.didactic.tools.jlc.signature.spi.Signature;
-import se.skillytaire.didactic.tools.jlc.spi.model.config.TestConfiguration;
 
 /**
  * Every constructor or message has this type of configuration.
@@ -53,7 +53,7 @@ public interface TestSignatureConfiguration<N extends TestSignatureConfiguration
 
 
 
-int getMaximalParameterCount();
+	int getMaximalParameterCount();
 public boolean isVisible() ;
 
  public boolean isInvisible() ;

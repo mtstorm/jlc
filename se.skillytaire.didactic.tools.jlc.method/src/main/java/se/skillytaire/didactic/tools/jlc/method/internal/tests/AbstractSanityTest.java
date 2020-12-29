@@ -3,9 +3,9 @@ package se.skillytaire.didactic.tools.jlc.method.internal.tests;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+import se.skillytaire.didactic.tools.jlc.api.JLCConfiguration;
 import se.skillytaire.didactic.tools.jlc.method.spi.model.config.AbstractTestMethodConfigurationTestNode;
 import se.skillytaire.didactic.tools.jlc.method.spi.model.config.TestMethodConfiguration;
-import se.skillytaire.didactic.tools.jlc.spi.model.config.JLCConfiguration;
 import se.skillytaire.didactic.tools.jlc.spi.model.naming.DisplayName;
 import se.skillytaire.didactic.tools.jlc.spi.model.naming.SanityCheck;
 
