@@ -1,14 +1,14 @@
 package se.skillytaire.didactic.tools.jlc.api;
 
 public enum TestDisplayOrder {
-	//Feature, archetype e.d
+	// Feature, archetype e.d
 	/**
 	 * Sequence based on the Java names found.
 	 */
-	Natural, 
+	Natural,
 	/**
 	 * Non specific
 	 */
 	NONE
-	
+
 }

@@ -18,10 +18,7 @@ public class DoubleTestObjectFactory implements ComparableTestObjectFactory<Doub
 		return 13.13D;
 	}
 
-	@Override
-	public boolean isTypeFor(Class<?> type) {
-		return Double.class == type || Double.TYPE == type;
-	}
+
 	public Class<?>[] types() {
 		return new Class[] { type(), Double.TYPE };
 	}

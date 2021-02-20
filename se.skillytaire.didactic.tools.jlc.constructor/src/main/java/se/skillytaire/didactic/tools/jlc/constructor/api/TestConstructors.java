@@ -8,6 +8,7 @@ import java.lang.annotation.Target;
 
 import org.junit.jupiter.api.DisplayName;
 
+import se.skillytaire.didactic.tools.jlc.api.JLC;
 import se.skillytaire.didactic.tools.jlc.api.TestGroup;
 import se.skillytaire.didactic.tools.jlc.api.TestOrder;
 
@@ -17,6 +18,31 @@ import se.skillytaire.didactic.tools.jlc.api.TestOrder;
 @Documented
 @Target(ElementType.TYPE)
 public @interface TestConstructors {
+	boolean enabled() default true;
+	/**
+	 * Set the display name for the 'Constructors'-node . Defaults to 'Constructors'.
+	 * @return the display name for all the 'methods'-node.
+	 * @see #CONSTRUCTORS
+	 */	
+	
+	DisplayName displayName() default @DisplayName(CONSTRUCTORS);
+	/**
+	 * @return
+	 */
+	boolean merge() default JLC.MERGE;
+
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	/**
 	 * 
 	 */
@@ -26,11 +52,6 @@ public @interface TestConstructors {
     * The default value for {@link #simpleName()} is {@value true}.
     */
    public static final boolean SIMPLE_NAME = true;
-   
-   /**
-    * The default value for {@link #merge()} is {@value false}.
-    */
-   public static final boolean MERGE = false;
    /**
     * The default value for {@link #displayName()}.
     */
@@ -42,13 +63,6 @@ public @interface TestConstructors {
     */
    TestConstructor[] value() default {};
    
-	/**
-	 * Set the display name for the 'Constructors'-node . Defaults to 'Constructors'.
-	 * @return the display name for all the 'methods'-node.
-	 * @see #CONSTRUCTORS
-	 */	
-
-   DisplayName displayName() default @DisplayName(CONSTRUCTORS);
    
    
    /**
@@ -59,7 +73,6 @@ public @interface TestConstructors {
    
    int parameterCount() default DEFAULT_PARAM_COUNT;
    
-   boolean enabled() default true;
    
    TestGroup[] grouping() default {};
    
@@ -69,8 +82,4 @@ public @interface TestConstructors {
     * @return
     */
    boolean simpleName() default SIMPLE_NAME;
-   /**
-    * @return
-    */
-   boolean merge() default MERGE;
 }

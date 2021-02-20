@@ -37,7 +37,7 @@ public abstract class AnnotatedInvoker<A extends Annotation, T, F extends TestOb
     public final T create(JLCConfigurationImpl<?> configuration, Class<?> type) {
     //public final T create(Class<?> type) {
     	T result;
-       if(hasOverride() && this.override.isTypeFor(type)) {
+       if(hasOverride() && this.override.isFor(type)) {
           result = createOverride();
        }else {
           result = doCreate(configuration,type);

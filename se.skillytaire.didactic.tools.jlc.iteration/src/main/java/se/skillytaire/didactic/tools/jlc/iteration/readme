@@ -1,0 +1,11 @@
+Tests for the Iterator
+
+Messages
+
+
+hasNext() 
+
+next()
+	NoSuchElementException - if the iteration has no more elements\
+
+remove();	

@@ -4,8 +4,9 @@ import java.lang.reflect.Executable;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Optional;
 
-import se.skillytaire.didactic.tools.jlc.api.TestConfiguration;
 import se.skillytaire.didactic.tools.jlc.signature.spi.Signature;
+import se.skillytaire.didactic.tools.jlc.spi.TestConfiguration;
+import se.skillytaire.didactic.tools.jlc.spi.e.JLCFeatureConfiguration;
 
 /**
  * Every constructor or message has this type of configuration.
@@ -13,7 +14,14 @@ import se.skillytaire.didactic.tools.jlc.signature.spi.Signature;
  *
  * @param <S>
  */
-public interface TestSignatureConfiguration<N extends TestSignatureConfiguration<N,T,S,E>,  T,S extends Signature,E extends Executable> extends TestConfiguration<N,T> {
+public interface TestSignatureConfiguration
+		<N extends TestSignatureConfiguration<N,T,S,E,D>,
+		 T,
+		 S extends Signature,
+		 E extends Executable,
+		 D extends JLCFeatureConfiguration> 
+
+         extends TestConfiguration<D,N,T> {
 
    S getSignature();
    boolean isDeclared();

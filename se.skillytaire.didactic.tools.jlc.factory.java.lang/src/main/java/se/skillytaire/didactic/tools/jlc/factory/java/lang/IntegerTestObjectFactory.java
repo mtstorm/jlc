@@ -19,10 +19,7 @@ public class IntegerTestObjectFactory implements ComparableTestObjectFactory<Int
 		return 13;
 	}
 
-	@Override
-	public boolean isTypeFor(Class<?> type) {
-		return Integer.class == type || Integer.TYPE == type;
-	}
+
 	public Class<?>[] types() {
 		return new Class[] { type(), Integer.TYPE };
 	}

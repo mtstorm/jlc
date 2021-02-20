@@ -14,7 +14,7 @@ import se.skillytaire.didactic.tools.jlc.spi.util.ClassProperty;
  * @author prolector
  *
  */
-@FunctionalInterface
+//@FunctionalInterface 
 public interface OptionalPropertyValidator {
 //   Logger log = Logger.getLogger(TestObjectFactory.class.getName());
    /**
@@ -30,13 +30,11 @@ public interface OptionalPropertyValidator {
       ServiceLoader<OptionalPropertyValidator> serviceLoader =
             ServiceLoader.load(OptionalPropertyValidator.class, loader);
       
-      boolean isOptional = true;
+      boolean isOptional = false;
       for (OptionalPropertyValidator optionalFieldValidator : serviceLoader) {
-//         log.log(Level.FINE, String
-//               .format("The OptionalFieldValidator '%s' has been found", pptionalFieldValidator
-//                     .getClass().getName()));
-         if(!optionalFieldValidator.getType(property).equals(PropertyType.Required) ) {
-            isOptional = false;
+    	  PropertyType type = optionalFieldValidator.getType(property);
+         if(type.equals(PropertyType.Optional) ) {
+            isOptional = true;
             break;
          }
       }

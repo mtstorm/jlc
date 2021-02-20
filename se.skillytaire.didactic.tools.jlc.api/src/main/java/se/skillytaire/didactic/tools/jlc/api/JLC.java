@@ -9,9 +9,8 @@ import java.lang.annotation.Target;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 /**
- * The JLC builder builds your test.
- * 
- * @author Skillytaire AB
+ * Use this annotation to enable the JLC didactic test framework.
+ *
  *
  */
 @Retention(RetentionPolicy.RUNTIME)
@@ -19,13 +18,24 @@ import org.junit.jupiter.api.extension.ExtendWith;
 @Target(ElementType.TYPE)
 @ExtendWith(JLCTestBuilder.class)
 public @interface JLC {
-
+	/**
+	 * An empty string.
+	 */
 	String EMPTY = "";
+	/**
+	 * The default value for {@link #merge()} is {@value false}.
+	 */
+	boolean MERGE = false;
 	Class<?> DEFAULT_VALUE = Void.class;
+
+	boolean DEFAULT_ENABLED = true;
+
+	boolean enabled() default JLC.DEFAULT_ENABLED;
+
 	/**
 	 * When declared the system will use this test factory for your bean under test.
 	 * It must match the {@link JLC#value()} for it's type.
-	 * 
+	 *
 	 * @return Default to VoidTestObjectFactory.class
 	 */
 	Class<? extends TestObjectFactory<?>> testFactory() default VoidTestObjectFactory.class;
@@ -33,7 +43,7 @@ public @interface JLC {
 	/**
 	 * Allows you to add additional test factory classes. These will become a
 	 * registry of it's own. Predefined registries can also be used.
-	 * 
+	 *
 	 * @return
 	 */
 
@@ -41,7 +51,7 @@ public @interface JLC {
 
 	/**
 	 * Allows you to add one or more registries of TestObjectFactories.
-	 * 
+	 *
 	 * @return
 	 */
 	Class<? extends TestObjectFactoryRegistry>[] registries() default {};
@@ -49,7 +59,7 @@ public @interface JLC {
 	/**
 	 * When set to true, the annotated fields in your test will be initialized and
 	 * the dependencies in other factories.
-	 * 
+	 *
 	 * @return
 	 */
 	boolean autoInject() default true;
@@ -57,41 +67,49 @@ public @interface JLC {
 	/**
 	 * When you do not specify the testFactory, it will try to resolve the test
 	 * factory based on the value. It will auto lookup.
-	 * 
+	 *
 	 */
 	boolean autoLookUpTestFactory() default true;
 
 	/**
 	 * The class to test, only required when using the builder of JLC.
-	 * 
+	 *
 	 * @return
 	 */
 	Class<?> value() default Void.class;
 
 	/**
 	 * Display the TID (Test IDentifier)
-	 * 
+	 *
 	 * @return
 	 */
 	boolean displayTid() default false;
 
 	/**
 	 * Enables the best practice tests.
-	 * 
+	 *
 	 * @return run the best practice tests.
 	 */
 	boolean bestPractices() default true;
 
 	/**
 	 * Hide composite empty tests.
-	 * 
+	 *
 	 * @return
 	 */
 	boolean showEmptyTests() default false;
 
 	/**
+	 * When there are features on the build path and there are no feature tests,
+	 * should JLC fail or not.
+	 *
+	 * @return
+	 */
+	boolean failEmptyFeature() default false;
+
+	/**
 	 * The order of the feature nodes in the ui.
-	 * 
+	 *
 	 * @return
 	 */
 	TestOrder order() default @TestOrder();
@@ -100,17 +118,17 @@ public @interface JLC {
 	 * When there is no value for featured annotation, the system will auto scan the
 	 * feature. When there are value, only the specified feature values will be
 	 * used, and auto scan is disabled.
-	 * 
+	 *
 	 * When merge is enabled the system will auto scan the features, and will update
 	 * the features having the configured feature values.
-	 * 
+	 *
 	 * @return
 	 */
-	boolean merge() default false;
+	boolean merge() default JLC.MERGE;
 
 	/**
 	 * When group is enabled all the features will enable grouping to ALL.
-	 * 
+	 *
 	 * @return default to false;
 	 */
 	boolean group() default false;

@@ -8,13 +8,15 @@ import se.skillytaire.didactic.tools.jlc.api.Archetype;
 import se.skillytaire.didactic.tools.jlc.api.JLCConfiguration;
 import se.skillytaire.didactic.tools.jlc.method.api.TestMethod;
 import se.skillytaire.didactic.tools.jlc.method.api.TestMethods;
+import se.skillytaire.didactic.tools.jlc.method.internal.spi.TestMethodAnnotationTestConfigurationFactory;
+import se.skillytaire.didactic.tools.jlc.method.internal.spi.TestMethodsConfiguration;
 import se.skillytaire.didactic.tools.jlc.method.spi.util.MethodTool;
 import se.skillytaire.didactic.tools.jlc.signature.spi.MethodSignature;
 import se.skillytaire.didactic.tools.jlc.signature.spi.model.config.AbstractTestSignatureConfiguration;
 
 
 
-public class TestMethodConfiguration<T> extends AbstractTestSignatureConfiguration<TestMethodConfiguration<T>,T, MethodSignature, Method>
+public class TestMethodConfiguration<T> extends AbstractTestSignatureConfiguration<TestMethodConfiguration<T>,T, MethodSignature, Method, TestMethodsConfiguration>
 		 {
 
 
@@ -23,8 +25,8 @@ public class TestMethodConfiguration<T> extends AbstractTestSignatureConfigurati
 	 * 
 	 * @param testMethod
 	 */
-	public TestMethodConfiguration(JLCConfiguration<T> parent, TestMethod testMethod, int globalMaxParameterCount) {
-		this(parent, TestMethodAnnotationTool.of(testMethod), testMethod.dbc());
+	public TestMethodConfiguration(JLCConfiguration<T> parent,TestMethodsConfiguration defaults, TestMethod testMethod, int globalMaxParameterCount) {
+		this(parent,defaults, TestMethodAnnotationTestConfigurationFactory.of(testMethod), testMethod.dbc());
 		apply(testMethod, globalMaxParameterCount);
 
 	}
@@ -34,15 +36,17 @@ public class TestMethodConfiguration<T> extends AbstractTestSignatureConfigurati
 	 * 
 	 * @param testMethod
 	 */
-	public TestMethodConfiguration(JLCConfiguration<T> parent, MethodSignature message) {
-		this(parent, message, IllegalArgumentException.class);
+	public TestMethodConfiguration(JLCConfiguration<T> parent, TestMethodsConfiguration defaults, MethodSignature message) {
+		this(parent, defaults, message, IllegalArgumentException.class);
 	}
 
 	
-	public TestMethodConfiguration(JLCConfiguration<T> parent, MethodSignature message,
+	private TestMethodConfiguration(JLCConfiguration<T> parent,TestMethodsConfiguration defaults, MethodSignature message,
 			Class<? extends Exception> nullCheck) {
-		super(parent, message, nullCheck);
-		setMaximalParameterCount(TestMethods.DEFAULT_PARAM_COUNT);
+		super(parent,defaults, message, nullCheck);
+		this.setMaximalParameterCount(defaults.getMaxParameterCount());
+		this.setSimpleName(defaults.isSimpleName());
+		this.setExecutor(message.getMethod());
 	}
 
 	public boolean matches(TestMethod obj) {

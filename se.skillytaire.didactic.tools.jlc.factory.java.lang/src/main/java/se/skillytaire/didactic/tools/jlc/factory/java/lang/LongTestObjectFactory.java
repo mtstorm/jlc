@@ -19,10 +19,7 @@ public class LongTestObjectFactory implements ComparableTestObjectFactory<Long> 
 		return 13L;
 	}
 
-	@Override
-	public boolean isTypeFor(Class<?> type) {
-		return Long.class == type || Long.TYPE == type;
-	}
+
 	public Class<?>[] types() {
 		return new Class[] { type(), Long.TYPE };
 	}

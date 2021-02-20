@@ -6,9 +6,10 @@ import java.util.Optional;
 
 import se.skillytaire.didactic.tools.jlc.signature.spi.Signature;
 import se.skillytaire.didactic.tools.jlc.signature.spi.model.config.TestSignatureConfiguration;
+import se.skillytaire.didactic.tools.jlc.spi.e.JLCFeatureConfiguration;
 import se.skillytaire.didactic.tools.jlc.spi.model.structure.AbstractJLCCompositeTestNode;
 
-public abstract class AbstractTestSignatureConfigurationTestNode<N extends TestSignatureConfiguration<N,T,S,E>,T, S extends Signature,E extends Executable> extends AbstractJLCCompositeTestNode<T>{
+public abstract class AbstractTestSignatureConfigurationTestNode<N extends TestSignatureConfiguration<N,T,S,E,D>,T, S extends Signature,E extends Executable,D extends JLCFeatureConfiguration> extends AbstractJLCCompositeTestNode<T>{
 	protected final N testConfiguration;
 	
 	public AbstractTestSignatureConfigurationTestNode(N config) {

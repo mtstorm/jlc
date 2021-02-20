@@ -1,34 +1,63 @@
 package se.skillytaire.didactic.tools.jlc.property.internal;
 
+import java.lang.reflect.Method;
 import java.net.URI;
 import java.util.Optional;
 
 import se.skillytaire.didactic.tools.jlc.api.Archetype;
 import se.skillytaire.didactic.tools.jlc.api.JLCConfiguration;
 import se.skillytaire.didactic.tools.jlc.property.api.TestProperty;
+import se.skillytaire.didactic.tools.jlc.property.spi.OptionalPropertyValidator;
+import se.skillytaire.didactic.tools.jlc.signature.spi.model.naming.SignatureDisplayName;
 import se.skillytaire.didactic.tools.jlc.spi.model.config.AbstractTestConfiguration;
+import se.skillytaire.didactic.tools.jlc.spi.util.ClassProperty;
 //Has field and methods
-public class TestPropertyConfiguration<T> extends AbstractTestConfiguration<TestPropertyConfiguration<T>,T> implements Comparable<TestPropertyConfiguration<T>>{
-	private Property<T> property;
+public class TestPropertyConfiguration<T> extends AbstractTestConfiguration<TestPropertiesConfiguration, TestPropertyConfiguration<T>,T> implements Comparable<TestPropertyConfiguration<T>>{
+	//FIXME binding aan model maken->extern project
+	private ClassProperty property;
 	
 	
-	public TestPropertyConfiguration(JLCConfiguration<T> parent, TestProperty annotation) {
-		super(parent);
+	protected ClassProperty getProperty() {
+		return property;
 	}
-	public TestPropertyConfiguration(JLCConfiguration<T> parent, Property<T> property) {
-		super(parent);
+	public TestPropertyConfiguration(JLCConfiguration<T> parent,TestPropertiesConfiguration defaults, TestProperty annotation) {
+		super(parent, defaults);
+		this.setEnforced(true);
+		this.setDeclared(true);
+		this.setDisplayNameValue(annotation.displayName().value());
+		this.setEnabled(annotation.enabled());
+	}
+	public TestPropertyConfiguration(JLCConfiguration<T> parent,TestPropertiesConfiguration defaults, ClassProperty property) {
+		super(parent,defaults);
 		this.property = property;
 	}
 
+
+	
+	
 	@Override
-	public String getName() {
-		String value;
+   public int hashCode() {
+      return this.property.getName().hashCode();
+   }
+   @Override
+   public boolean equals(Object obj) {
+
+      boolean equals = super.equals(obj);
+      if(!equals && obj instanceof TestPropertyConfiguration that) {
+         equals = this.property.getName().equals(that.property.getName());
+      }
+      return equals;
+   }
+   @Override
+	public final String getName() {
+		String displayName;
 		if(hasDisplayNameValue()) {
-			value = getDisplayNameValue() +" ("+getArchetype().getName()+")";
+			displayName = getDisplayNameValue();
 		}else {
-			value = getArchetype().getName();
+			displayName = this.property.getName();
 		}
-		return value;
+
+		return displayName;
 	}
 
 	@Override
@@ -43,4 +72,17 @@ public class TestPropertyConfiguration<T> extends AbstractTestConfiguration<Test
 	}
 	
 	
+	
+
+
+
+	public boolean isOptional() {
+		return OptionalPropertyValidator.isOptional(this.property);
+	}
+   @Override
+   public String toString() {
+      // TODO Auto-generated method stub
+      return String.format( "%s  propertyName=%s", super.toString(), getName());
+   }
+
 }

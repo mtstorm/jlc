@@ -3,7 +3,9 @@ package se.skillytaire.didactic.tools.jlc.spi.model.structure;
 import java.net.URI;
 import java.util.Optional;
 
-import se.skillytaire.didactic.tools.jlc.api.TestConfiguration;
+import se.skillytaire.didactic.tools.jlc.spi.TestConfiguration;
+import se.skillytaire.didactic.tools.jlc.spi.e.JLCFeatureConfiguration;
+import se.skillytaire.didactic.tools.jlc.spi.ext.feature.TestConfigurationTestNode;
 import se.skillytaire.didactic.tools.jlc.spi.model.naming.BasicDisplayName;
 import se.skillytaire.didactic.tools.jlc.spi.model.naming.DisplayName;
 /**
@@ -13,7 +15,9 @@ import se.skillytaire.didactic.tools.jlc.spi.model.naming.DisplayName;
  * @param <T>
  * @param <C>
  */
-public abstract class AbstractConfigurationTestNode<T, C extends TestConfiguration<C,T> > extends AbstractJLCCompositeTestNode<T>{
+public abstract class AbstractConfigurationTestNode<T,D extends JLCFeatureConfiguration, C extends TestConfiguration<D,C,T> > 
+	extends AbstractJLCCompositeTestNode<T>
+	implements TestConfigurationTestNode<D,C, T>{
 	protected final C config;
 	
 	public AbstractConfigurationTestNode(C config) {
@@ -29,7 +33,7 @@ public abstract class AbstractConfigurationTestNode<T, C extends TestConfigurati
 		return this.config.toUri();
 	}
 
-	protected final C getTestConfiguration() {
+	public final C getTestConfiguration() {
 		return config;
 	}
 	@Override

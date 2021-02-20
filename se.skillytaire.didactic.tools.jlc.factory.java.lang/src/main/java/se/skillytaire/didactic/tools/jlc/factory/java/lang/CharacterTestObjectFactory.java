@@ -19,10 +19,7 @@ public class CharacterTestObjectFactory implements ComparableTestObjectFactory<C
 		return 13;
 	}
 
-	@Override
-	public boolean isTypeFor(Class<?> type) {
-		return Character.class == type || Character.TYPE == type;
-	}
+
 	public Class<?>[] types() {
 		return new Class[] { type(), Character.TYPE };
 	}

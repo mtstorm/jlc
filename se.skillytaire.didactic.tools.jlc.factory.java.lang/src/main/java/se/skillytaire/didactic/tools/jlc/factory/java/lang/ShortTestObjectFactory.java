@@ -19,10 +19,6 @@ public class ShortTestObjectFactory implements ComparableTestObjectFactory<Short
 		return 13;
 	}
 
-	@Override
-	public boolean isTypeFor(Class<?> type) {
-		return Short.class == type || Short.TYPE == type;
-	}
 	public Class<?>[] types() {
 		return new Class[] { type(), Short.TYPE };
 	}

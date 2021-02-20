@@ -2,7 +2,6 @@ package se.skillytaire.didactic.tools.jlc.spi.internal;
 
 import java.util.Comparator;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 import se.skillytaire.didactic.tools.jlc.api.JLC;
 import se.skillytaire.didactic.tools.jlc.api.JLCConfigurationTest;
@@ -148,5 +147,15 @@ public class TestFactoriesTestNode<T> extends AbstractJLCCompositeTestNode<T> im
 	public void peek() {
 
 	}
+
+   @Override
+   public boolean isEnabled() {
+      return true;
+   }
+
+   @Override
+   public boolean isArchetyped() {
+      return false;
+   }
 
 }

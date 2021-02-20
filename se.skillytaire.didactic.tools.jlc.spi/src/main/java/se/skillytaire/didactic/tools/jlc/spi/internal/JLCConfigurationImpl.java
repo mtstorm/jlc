@@ -3,13 +3,12 @@ package se.skillytaire.didactic.tools.jlc.spi.internal;
 import java.lang.annotation.Annotation;
 import java.net.URI;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 import java.util.Optional;
-import java.util.ServiceLoader;
+import java.util.TreeMap;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.logging.Logger;
@@ -21,20 +20,16 @@ import org.junit.jupiter.api.DynamicNode;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.function.Executable;
 
-import se.skillytaire.didactic.tools.jlc.api.Archetype;
-import se.skillytaire.didactic.tools.jlc.api.ArchetypedCollection;
 import se.skillytaire.didactic.tools.jlc.api.ComparableTestObjectFactory;
-import se.skillytaire.didactic.tools.jlc.api.Enforcer;
-import se.skillytaire.didactic.tools.jlc.api.ImmutableType;
 import se.skillytaire.didactic.tools.jlc.api.JLC;
 import se.skillytaire.didactic.tools.jlc.api.JLCConfiguration;
 import se.skillytaire.didactic.tools.jlc.api.JLCConfigurationException;
-import se.skillytaire.didactic.tools.jlc.api.JLCConfigurationTest;
-import se.skillytaire.didactic.tools.jlc.api.TestConfiguration;
 import se.skillytaire.didactic.tools.jlc.api.TestObjectFactory;
 import se.skillytaire.didactic.tools.jlc.api.TestObjectFactoryRegistry;
 import se.skillytaire.didactic.tools.jlc.api.TestOrderDescription;
 import se.skillytaire.didactic.tools.jlc.api.VoidTestObjectFactory;
+import se.skillytaire.didactic.tools.jlc.spi.ext.attribute.AttributeValueFactory;
+import se.skillytaire.didactic.tools.jlc.spi.ext.attribute.JLCAttributeValueNotFoundException;
 import se.skillytaire.didactic.tools.jlc.spi.ext.feature.FeatureTestNodeFactory;
 import se.skillytaire.didactic.tools.jlc.spi.ext.feature.JLCFeatereTestNode;
 import se.skillytaire.didactic.tools.jlc.spi.ext.immutable.ImmutableObject;
@@ -46,21 +41,21 @@ import se.skillytaire.didactic.tools.jlc.spi.model.structure.CompositeTestNode;
 import se.skillytaire.didactic.tools.jlc.spi.model.structure.JLCTestNode;
 import se.skillytaire.didactic.tools.jlc.spi.util.ClassTool;
 
-public class JLCConfigurationImpl<T> implements JLCConfiguration<T>{
+public final class JLCConfigurationImpl<T> implements JLCConfiguration<T> {
 	private static final Class<?> DEFAULT_VALUE = Void.class;
 	private static final Class<? extends TestObjectFactory<?>> DEFAULT_TEST_FACTORY = VoidTestObjectFactory.class;
 
 	private Logger log = Logger.getLogger(JLCConfigurationImpl.class.getName());
 	private final Object testInstance;
 	private final boolean showEmpyTests;
+	private final boolean failEmptyFeature;
 
 	private TestObjectFactory<T> objectFactory;
 	private final boolean displayTid;
 	private final boolean includeBestPractices;
 	private final boolean autoInject;
-	private  Class<T> beanUnderTestType;
-	private final Map<String, ArchetypedCollection<T, ?>> extensionConfigurations = new HashMap<>();
-
+	private Class<T> beanUnderTestType;
+	
 	private final TestOrderDescription order;
 
 	private final boolean merge;
@@ -89,6 +84,7 @@ public class JLCConfigurationImpl<T> implements JLCConfiguration<T>{
 		this.includeBestPractices = jlc.bestPractices();
 		// Class<?> declaredFactory = jlc.testFactory();
 		this.showEmpyTests = jlc.showEmptyTests();
+		this.failEmptyFeature = jlc.failEmptyFeature();
 		this.order = ConfigurationTool.getSort(testClass, JLC.class);
 		this.merge = jlc.merge();
 		loadDeclaredTestFactory(jlc);
@@ -97,12 +93,14 @@ public class JLCConfigurationImpl<T> implements JLCConfiguration<T>{
 		loadSPI();
 		if (jlc.autoLookUpTestFactory() && this.hasBeanUnderTestType() && !hasObjectFactory()) {
 			Optional<TestObjectFactory<?>> optionalTestObjectFactory = this.factories.stream()
-					.filter(f -> f.isTypeFor(beanUnderTestType)).findFirst();
+					.filter(f -> f.isFor(beanUnderTestType)).findFirst();
 			if (optionalTestObjectFactory.isPresent()) {
 				this.objectFactory = (TestObjectFactory<T>) optionalTestObjectFactory.get();
 			}
 		}
-
+		
+		//factory
+		AttributeValueFactory.register(this);
 //		if(this.autoInject) {
 //			List<TestObjectFactory<?>> factories = new ArrayList<>();
 //			
@@ -144,34 +142,35 @@ public class JLCConfigurationImpl<T> implements JLCConfiguration<T>{
 		if (TestObjectFactory.class.isAssignableFrom(this.testClass)) {
 			this.objectFactory = (TestObjectFactory<T>) this.testInstance;
 			this.factories.add(objectFactory);
-			this.beanUnderTestType = objectFactory.type();
+			this.beanUnderTestType = (Class<T>) objectFactory.type();
 		} else {
 			Class<?> valueClass = jlc.value();
 			Class<? extends TestObjectFactory<?>> declaredFactory = jlc.testFactory();
-			
-			if(declaredFactory != VoidTestObjectFactory.class) {
+
+			if (declaredFactory != VoidTestObjectFactory.class) {
 				try {
 					this.objectFactory = (TestObjectFactory<T>) declaredFactory.getDeclaredConstructor().newInstance();
 					this.factories.add(objectFactory);
-					
+
 				} catch (Exception e) {
 					String msg = String.format("Unable to load the declared testFactory %s in class %s",
 							declaredFactory.getName(), testClass.getName());
 					throw new JLCConfigurationException(msg, e);
-				}	
-				//check for matching value == factory.type
-				this.beanUnderTestType = objectFactory.type();
-				if(valueClass!=DEFAULT_VALUE) {
-					if(this.beanUnderTestType != valueClass) {
-						String msg = String.format("The value '%s' is not produced by the factory '%s' but is of type '%s'",
+				}
+				// check for matching value == factory.type
+				this.beanUnderTestType = (Class<T>) objectFactory.type();
+				if (valueClass != DEFAULT_VALUE) {
+					if (this.beanUnderTestType != valueClass) {
+						String msg = String.format(
+								"The value '%s' is not produced by the factory '%s' but is of type '%s'",
 								valueClass.getName(), declaredFactory.getName(), beanUnderTestType.getName());
-						throw new JLCConfigurationException(msg);						
+						throw new JLCConfigurationException(msg);
 					}
 				}
 			} else {
 				this.beanUnderTestType = (Class<T>) valueClass;
 			}
-			
+
 		}
 	}
 
@@ -214,6 +213,7 @@ public class JLCConfigurationImpl<T> implements JLCConfiguration<T>{
 	private void loadSPI() {
 		TestObjectFactory.resolve().forEach(this.factories::add);
 	}
+
 	@Override
 	public Object getTestInstance() {
 		return testInstance;
@@ -253,29 +253,11 @@ public class JLCConfigurationImpl<T> implements JLCConfiguration<T>{
 //
 //	}
 
-	public <N extends TestConfiguration<N, T>> void register(ArchetypedCollection<T, N> extensionConfiguration,
-			Class<? extends TestConfiguration<N, T>> key) {
-		// System.out.println("REGISTAR!!!!" + key.getName());
-		ArchetypedCollection<T, ?> result = extensionConfigurations.put(key.getName(), extensionConfiguration);
-		if (result != null) {
-			throw new IllegalStateException("The key " + key.getName() + " has already been taken.");
-		}
-	}
-
-	public boolean containsConfiguration(Class<? extends TestConfiguration<?, T>> key) {
-		return this.extensionConfigurations.containsKey(key.getName());
-	}
-
-	@SuppressWarnings("unchecked")
-	public <N extends TestConfiguration<N, T>> ArchetypedCollection<T, N> getExtensionConfiguration(Class<?> key) {
-		return (ArchetypedCollection<T, N>) this.extensionConfigurations.get(key.getName());
-	}
-
 	@Override
 	public String toString() {
 		return String.format(
-				"JLCConfiguration [testInstance=%s, displayTid=%s, includeBestPractices=%s, beanUnderTestType=%s, orderDescription=%s,  extensionConfigurations=%s]",
-				testInstance, displayTid, includeBestPractices, beanUnderTestType, this.order, extensionConfigurations);
+				"JLCConfiguration [testInstance=%s, displayTid=%s, includeBestPractices=%s, beanUnderTestType=%s, orderDescription=%s]",
+				testInstance, displayTid, includeBestPractices, beanUnderTestType, this.order);
 	}
 
 	/**
@@ -313,7 +295,7 @@ public class JLCConfigurationImpl<T> implements JLCConfiguration<T>{
 			throw new IllegalArgumentException("Type is void");
 		}
 		F factory;
-		Optional<TestObjectFactory<?>> optionalFactory = this.factories.stream().filter(f -> f.isTypeFor(type))
+		Optional<TestObjectFactory<?>> optionalFactory = this.factories.stream().filter(f -> f.isFor(type))
 
 				.findFirst();
 		if (optionalFactory.isPresent()) {
@@ -349,7 +331,7 @@ public class JLCConfigurationImpl<T> implements JLCConfiguration<T>{
 				}
 
 				@Override
-				public boolean isTypeFor(Class<?> aType) {
+				public boolean isFor(Class<?> aType) {
 					return type == aType;
 				}
 
@@ -401,7 +383,7 @@ public class JLCConfigurationImpl<T> implements JLCConfiguration<T>{
 		return isImmutableType;
 	}
 
-	private <F extends TestObjectFactory<E>, E> F getFactory(Class<?> type){
+	private <F extends TestObjectFactory<E>, E> F getFactory(Class<?> type) {
 		Optional<F> resolvedResult = resolveFactory(type);
 		if (!resolvedResult.isPresent()) {
 			throw new IllegalStateException("There is no test factory found for the class " + type.getName());
@@ -409,7 +391,7 @@ public class JLCConfigurationImpl<T> implements JLCConfiguration<T>{
 		F factory = resolvedResult.get();
 		return factory;
 	}
-	
+
 	private <E> void ensureNotNull(TestObjectFactory<E> factory, String methodName, E instance) {
 		if (instance == null) {
 			String message = String.format(
@@ -418,6 +400,7 @@ public class JLCConfigurationImpl<T> implements JLCConfiguration<T>{
 			throw new IllegalStateException(message);
 		}
 	}
+
 	@Override
 	public <E> E getThisInstance(Class<?> type) {
 		TestObjectFactory<E> factory = getFactory(type);
@@ -425,6 +408,7 @@ public class JLCConfigurationImpl<T> implements JLCConfiguration<T>{
 		ensureNotNull(factory, "createThis", thisInstance);
 		return thisInstance;
 	}
+
 	@Override
 	public <E> E getThatInstance(Class<?> type) {
 		TestObjectFactory<E> factory = getFactory(type);
@@ -432,6 +416,7 @@ public class JLCConfigurationImpl<T> implements JLCConfiguration<T>{
 		ensureNotNull(factory, "createThat", thatInstance);
 		return thatInstance;
 	}
+
 	@Override
 	public <E> E getLessThenInstance(Class<?> type) {
 		ComparableTestObjectFactory<E> factory = getFactory(type);
@@ -439,6 +424,7 @@ public class JLCConfigurationImpl<T> implements JLCConfiguration<T>{
 		ensureNotNull(factory, "createLessThen", lessThanInstance);
 		return lessThanInstance;
 	}
+
 	@Override
 	public <E> E getGreaterThenInstance(Class<?> type) {
 		ComparableTestObjectFactory<E> factory = getFactory(type);
@@ -451,12 +437,11 @@ public class JLCConfigurationImpl<T> implements JLCConfiguration<T>{
 //		setFields(instance, instance.getClass());
 //	}
 
-	public static <A extends Annotation> void setAnnotatedFields(Object instance, AnnotatedInvoker<Annotation, ?, ?> invoker) {
+	public static <A extends Annotation> void setAnnotatedFields(Object instance,
+			AnnotatedInvoker<Annotation, ?, ?> invoker) {
 		ClassTool tool = new ClassTool(instance.getClass());
 		tool.fields(invoker.getAnnotation())
-				.map(field -> InstanceFieldInitializer.forInstance(instance)
-				.using(field)
-				.initialize(invoker))
+				.map(field -> InstanceFieldInitializer.forInstance(instance).using(field).initialize(invoker))
 				.forEach(InstanceFieldInitializer::invoke);
 	}
 
@@ -481,7 +466,7 @@ public class JLCConfigurationImpl<T> implements JLCConfiguration<T>{
 //	}
 	public void autowire() {
 		new AutoWire(this, this.testInstance);
-		
+
 //		
 //		
 //		//load all the fields having the annotations for the factory.
@@ -498,148 +483,293 @@ public class JLCConfigurationImpl<T> implements JLCConfiguration<T>{
 	}
 
 	@Override
-	public Stream<TestObjectFactory<?>> factories(){
+	public Stream<TestObjectFactory<?>> factories() {
 		return this.factories.stream();
 	}
 
-
 	@Override
 	public Stream<DynamicNode> stream() {
-      Stream<JLCFeatereTestNode<Object>> featureNodes = FeatureTestNodeFactory.structure((JLCConfigurationImpl<Object>) this);
-      List<JLCFeatereTestNode<Object>> ding = featureNodes.sorted(FeatureTestNodeFactory.getComperator())
-            .collect(Collectors.toList());
-      SweepIterator<JLCFeatereTestNode<Object>> sweep = new SweepIterator<JLCFeatereTestNode<Object>>(
-            ding.listIterator(), e -> e.init((JLCConfigurationImpl<Object>) this), e -> e.build());
-       sweep.setPeek(e->e.peek());
-      while (sweep.hasNext()) {
-         sweep.next();
-      }
-      Predicate<JLCTestNode<Object>> filter = n -> {
-         boolean ok = true;
-         if (n instanceof CompositeTestNode) {
-            ok = n.hasChildren(); // FIXME plus executables
-         }
-         return ok;
-      };
-      if (this.isShowEmpyTests()) {
-         filter = n -> true;
-      }
-      final Predicate<JLCTestNode<Object>> filterToApply = filter;
-      return ding.stream().filter(filter).map(n -> JLCConfigurationImpl.convert(n, filterToApply));
+		Stream<JLCFeatereTestNode<Object>> featureNodes = FeatureTestNodeFactory
+				.structure((JLCConfigurationImpl<Object>) this);
+		List<JLCFeatereTestNode<Object>> ding = featureNodes.sorted(FeatureTestNodeFactory.getComperator())
+				.collect(Collectors.toList());
+		SweepIterator<JLCFeatereTestNode<Object>> sweep = new SweepIterator<JLCFeatereTestNode<Object>>(
+				ding.listIterator(), e -> e.init((JLCConfigurationImpl<Object>) this), 
+				   e -> { 
+				      if(e.isEnabled()) {
+				         log.fine("Do build "+ e.getDisplayName());
+				         e.build();
+				      }
+				}
+				);
+		sweep.setPeek(e -> e.peek());
+		while (sweep.hasNext()) {
+			sweep.next();
+		}
+		Predicate<JLCTestNode<Object>> filter = n -> {
+			boolean ok = true;
+			if (n instanceof CompositeTestNode) {
+				ok = n.hasChildren(); // FIXME plus executables
+			}
+			return ok;
+		};
+		if (this.isShowEmpyTests()) {
+			filter = n -> true;
+		}
+		final Predicate<JLCTestNode<Object>> filterToApply = filter;
+		return ding.stream()
+		      .filter(filter)
+		      .filter(n->n.hasChildren() || isShowEmpyTests() )
+		      .map(n -> JLCConfigurationImpl.convert(n, filterToApply));
 	}
+
+	/*
+	 * Rerunnable
+	 * 
+	 * Cloneable / serializable moeten de huidige tests met een andere object
+	 * factory kunnen uitvoeren
+	 * 
+	 * Niet elke test is relevant bijvoorbeeld rerunnable
+	 * 
+	 * Alle rerunnable tests moeten erin, echter niet zichzelf ivm recursie
+	 * 
+	 * Alle permutaties ook met orgineel versus rerunner combineren.
+	 * 
+	 * 
+	 * 
+	 */
+	private static <T> DynamicNode convert(JLCTestNode<T> node, Predicate<JLCTestNode<T>> filter) {
+		DynamicNode test;
+		DisplayName displayName = node.getDisplayName();
+		// System.out.println("Node -> "+ displayName);
+		Optional<URI> uri = node.toUri();
+		if (node instanceof CompositeTestNode) {
+			Stream<? extends DynamicNode> tests = Stream.empty();
+			CompositeTestNode<T> composite = (CompositeTestNode<T>) node;
+			tests = composite.children().filter(filter).map(n -> JLCConfigurationImpl.convert(n, filter));// .flatMap(JLCTestBuilder::convert);
+			if (uri.isPresent()) {
+				test = DynamicContainer.dynamicContainer(displayName.value(), uri.get(), tests);
+			} else {
+				test = DynamicContainer.dynamicContainer(displayName.value(), tests);
+			}
+		} else {
+			// single tests JLCSingleTestNode
+			// JLCExecutable
+			Executable executor = (Executable) node;
+
+			if (uri.isPresent()) {
+				test = DynamicTest.dynamicTest(displayName.value(), uri.get(), executor);
+			} else {
+				test = DynamicTest.dynamicTest(displayName.value(), executor);
+			}
+		}
+		return test;
+	}
+
+	private static final class SweepIterator<E> implements Iterator<E> {
+
+		private final ListIterator<E> listIterator;
+
+		private final Consumer<E> start;
+		private final Consumer<E> back;
+		private boolean backwards;
+		private Consumer<E> peek;
+
+		public SweepIterator(ListIterator<E> listIterator, Consumer<E> start, Consumer<E> back) {
+			if (listIterator == null) {
+				throw new IllegalArgumentException("List iterator is void");
+			}
+			this.listIterator = listIterator;
+			this.start = start;
+			this.back = back;
+		}
+
+		@Override
+		public boolean hasNext() {
+			return backwards ? listIterator.hasPrevious() : listIterator.hasNext();
+		}
+
+		@Override
+		public E next() {
+			E element = backwards ? listIterator.previous() : listIterator.next();
+			apply(element);
+			if (!backwards && !hasNext()) {
+				backwards = true;
+			}
+			return element;
+		}
+
+		private void apply(E e) {
+			if (e == null) {
+				throw new IllegalArgumentException("Element is void " + listIterator.previousIndex());
+			}
+			if (backwards) {
+				this.back.accept(e);
+			} else {
+				this.start.accept(e);
+			}
+			if (hasPeek()) {
+				getPeek().accept(e);
+			}
+		}
+
+		public Consumer<E> getPeek() {
+			return peek;
+		}
+
+		public boolean hasPeek() {
+			return peek != null;
+		}
+
+		public void setPeek(Consumer<E> peek) {
+			this.peek = peek;
+		}
+	}
+
+	@Override
+	public <A extends Annotation> Optional<A> getTestAnnotation(Class<A> annotationClass) {
+		A annotation = this.getTestInstance().getClass().getAnnotation(annotationClass);
+		return Optional.ofNullable(annotation);
+	}
+
+	@Override
+	public <A extends Annotation> Optional<A> getBeanUnderTestAnnotationx(Class<A> annotationClass) {
+		A annotation = this.getBeanUnderTestType().getAnnotation(annotationClass);
+		return Optional.ofNullable(annotation);
+	}
+
+	
+	private Map<String, Object> attributes = new TreeMap<String, Object>();
+	
+	
+	@Override
+	public <A> void setAttribute(String name, A value) {
+		attributes.put(name, value);
+		
+	}
+
+	@Override
+	public <A> A getAttribute(String name) throws JLCAttributeValueNotFoundException{
+		A result;
+		if(!attributes.containsKey(name)) {
+			throw new JLCAttributeValueNotFoundException(name);
+		}
+		result = (A) attributes.get(name);
+		return result;
+	}
+
+	@Override
+	public boolean isFailEmptyFeature() {
+		return failEmptyFeature;
+	}
+
+
+
+//	
+//	/**
+//	 * @deprecated verplaatsen naar TestConfigurationFactory
+//	 */
+//	@Deprecated
+//	public <N extends TestConfiguration<N, T>> Optional<N> findTestConfiguration(N testConfig) {
+//		Optional<TestConfigurationRegistry<T, N>> registry = this.find(testConfig.getClass());
+//		if(!registry.isPresent()) {
+//			throw new IllegalStateException("there is no test config registry");
+//		}
+//		TestConfigurationRegistry<T, N> reg = registry.get();
+//		return reg.stream().filter( e -> testConfig.equals(e)).findFirst();
+//	
+//	}
+
+
+//	private <N extends TestConfiguration<N, T>> ArchetypedCollection<T, N> get(N testConfig) {
+//		ArchetypedCollection<T, N> collection;
+//		Class<?> type = testConfig.getClass();
+//		// check if this test configuration type is allready existing
+//		if (containsConfiguration(type)) {
+//			collection = this.getExtensionConfiguration(type);
+//		} else {
+//			collection = new ArchetypedCollection<>();
+//			extensionConfigurations.put(type.getName(), collection);
+//		}
+//		return collection;
+//	}
+//	/**
+//	 * Creates a new test configuration.
+//	 * @param <N>
+//	 * @param configurable
+//	 * @return
+//	 */
+//	private <N extends TestConfiguration<N, T>> N createNewTestConfiguration(Object configurable) {
+//		Optional<N> optionalConfig = TestConfigurationFactory.createNew(this, configurable);
+//		if (optionalConfig.isEmpty()) {
+//			String msg = String.format("There is no test configuration for type %s created",
+//					configurable.getClass().getName());
+//			throw new JLCConfigurationException(msg);
+//		}
+//		N unregistered = optionalConfig.get();
+//		return unregistered;
+//	}
+//
+////	/**
+////	 * Tries to create a new configuration. When not existing it will add it.
+////	 * 
+////	 * @see TestConfigurationFactory#create(JLCConfiguration, Object)
+////	 */
+////	public <N extends TestConfiguration<N, T>> N register(Object configurable, Archetype archetype) {
+////		N result;
+////
+////		N unregistered = createNewTestConfiguration(configurable);
+////		Class<?> type = unregistered.getClass();
+////		ArchetypedCollection<T, N> c = get(unregistered);
+////		Optional<N> existing = c.resolve(unregistered);
+////		if (existing.isEmpty()) {
+////			c.add(unregistered);
+////
+////			result = unregistered;
+////		} else {
+////			result = existing.get();
+////
+////		}
+////		c.enforce(result, archetype);
+////
+////		return result;
+////	}
+//
+////private <N extends TestConfiguration<N, T>> void register(ArchetypedCollection<T, N> extensionConfiguration,
+////		Class<? extends TestConfiguration<N, T>> key) {
+////	// System.out.println("REGISTAR!!!!" + key.getName());
+////	ArchetypedCollection<T, ?> result = extensionConfigurations.put(key.getName(), extensionConfiguration);
+////	if (result != null) {
+////		throw new IllegalStateException("The key " + key.getName() + " has already been taken.");
+////	}
+////}
+//
+//	private boolean containsConfiguration(Class<?> key) {
+//		return this.extensionConfigurations.containsKey(key.getName());
+//	}
+//
+//	@SuppressWarnings("unchecked")
+//	private <N extends TestConfiguration<N, T>> ArchetypedCollection<T, N> getExtensionConfiguration(Class<?> key) {
+//		return (ArchetypedCollection<T, N>) this.extensionConfigurations.get(key.getName());
+//	}
+//
+//	
+//	
+//	
+//	public <N extends TestConfiguration<N,T>> N register(Object configurable) {
+//		N unregistered = createNewTestConfiguration(configurable);
+//		Class<?> type = unregistered.getClass();
+//		ArchetypedCollection<T, N> c = get(unregistered);
+////		if(c.containsDefault(unregistered)) {
+////			
+////		}
+//		//FIXME
+//		c.add(unregistered);
+//		
+//		
+//		return unregistered;
+//	}
 	
 	
 	
-  /*
-  * Rerunnable
-  * 
-  * Cloneable / serializable moeten de huidige tests met een andere object
-  * factory kunnen uitvoeren
-  * 
-  * Niet elke test is relevant bijvoorbeeld rerunnable
-  * 
-  * Alle rerunnable tests moeten erin, echter niet zichzelf ivm recursie
-  * 
-  * Alle permutaties ook met orgineel versus rerunner combineren.
-  * 
-  * 
-  * 
-  */
- private static <T> DynamicNode convert(JLCTestNode<T> node, Predicate<JLCTestNode<T>> filter) {
-    DynamicNode test;
-    DisplayName displayName = node.getDisplayName();
-    // System.out.println("Node -> "+ displayName);
-    Optional<URI> uri = node.toUri();
-    if (node instanceof CompositeTestNode) {
-       Stream<? extends DynamicNode> tests = Stream.empty();
-       CompositeTestNode<T> composite = (CompositeTestNode<T>) node;
-       tests = composite.children().filter(filter).map(n -> JLCConfigurationImpl.convert(n, filter));// .flatMap(JLCTestBuilder::convert);
-       if (uri.isPresent()) {
-          test = DynamicContainer.dynamicContainer(displayName.value(), uri.get(), tests);
-       } else {
-          test = DynamicContainer.dynamicContainer(displayName.value(), tests);
-       }
-    } else {
-       // single tests JLCSingleTestNode
-       // JLCExecutable
-       Executable executor = (Executable) node;
-
-       if (uri.isPresent()) {
-          test = DynamicTest.dynamicTest(displayName.value(), uri.get(), executor);
-       } else {
-          test = DynamicTest.dynamicTest(displayName.value(), executor);
-       }
-    }
-    return test;
- }
-private static final class SweepIterator<E> implements Iterator<E> {
-
-  private final ListIterator<E> listIterator;
-
-  private final Consumer<E> start;
-  private final Consumer<E> back;
-  private boolean backwards;
-  private Consumer<E> peek;
-
-  public SweepIterator(ListIterator<E> listIterator, Consumer<E> start, Consumer<E> back) {
-     if (listIterator == null) {
-        throw new IllegalArgumentException("List iterator is void");
-     }
-     this.listIterator = listIterator;
-     this.start = start;
-     this.back = back;
-  }
-
-  @Override
-  public boolean hasNext() {
-     return backwards ? listIterator.hasPrevious() : listIterator.hasNext();
-  }
-
-  @Override
-  public E next() {
-     E element = backwards ? listIterator.previous() : listIterator.next();
-     apply(element);
-     if (!backwards && !hasNext()) {
-        backwards = true;
-     }
-     return element;
-  }
-
-  private void apply(E e) {
-     if (e == null) {
-        throw new IllegalArgumentException("Element is void " + listIterator.previousIndex());
-     }
-     if (backwards){
-        this.back.accept(e);
-     } else {
-        this.start.accept(e);
-     }
-     if (hasPeek()) {
-        getPeek().accept(e);
-     }
-  }
-
-  public Consumer<E> getPeek() {
-     return peek;
-  }
-
-  public boolean hasPeek() {
-     return peek != null;
-  }
-
-  public void setPeek(Consumer<E> peek) {
-     this.peek = peek;
-  }
-}
-@Override
-public <A extends Annotation> Optional<A> getTestAnnotation(Class<A> annotationClass) {
-	A annotation =  this.getTestInstance().getClass().getAnnotation(annotationClass);
-	return Optional.ofNullable(annotation);
-}
-@Override
-public <A extends Annotation> Optional<A> getBeanUnderTestAnnotationx(Class<A> annotationClass) {
-	A annotation =  this.getBeanUnderTestType().getAnnotation(annotationClass);
-	return Optional.ofNullable(annotation);
-}
-
 }

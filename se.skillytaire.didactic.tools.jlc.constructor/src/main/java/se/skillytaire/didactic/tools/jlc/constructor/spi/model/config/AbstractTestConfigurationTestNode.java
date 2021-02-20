@@ -8,7 +8,7 @@ import se.skillytaire.didactic.tools.jlc.signature.spi.Signature;
 import se.skillytaire.didactic.tools.jlc.signature.spi.model.config.TestSignatureConfiguration;
 import se.skillytaire.didactic.tools.jlc.spi.model.structure.AbstractJLCCompositeTestNode;
 @Deprecated
-public abstract class AbstractTestConfigurationTestNode<T, C extends TestSignatureConfiguration<C,T, S,E>,S extends Signature,E extends Executable> extends AbstractJLCCompositeTestNode<T>{
+public abstract class AbstractTestConfigurationTestNode<T, C extends TestSignatureConfiguration<C,T, S,E,?>,S extends Signature,E extends Executable> extends AbstractJLCCompositeTestNode<T>{
 	private final C testConfiguration;
 	
 	public AbstractTestConfigurationTestNode(C config) {

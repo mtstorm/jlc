@@ -184,7 +184,7 @@
 //
 ////    static <T> Optional<ComparableTestObjectFactory<T>>  resolveFactory(Class<T> type) {
 ////       Optional<TestObjectFactory<T>> result = TestObjectFactory.resolveFactory(type);
-////       
+////
 ////       Optional<ComparableTestObjectFactory<T>> newResult;
 ////       if(result.isPresent()) {
 ////          ComparableTestObjectFactory<T> c = (ComparableTestObjectFactory<T>) result.get();
@@ -221,19 +221,19 @@
 //   public static void setFields(Object instance, Class<?> type) {
 //      setFields(instance, type, null);
 //   }
-//   
-//   
-//   
-//   
+//
+//
+//
+//
 ////   private static class InstanceTool {
 ////      private final Object instance;
 ////      private final TestObjectFactory<Object> objectFactory;
 ////      private ClassTool ct;
-////      
+////
 //////      public InstanceTool(Object instance)   {
 //////         this(instance, null);
 //////      }
-////      
+////
 ////      public InstanceTool(Object instance,TestObjectFactory<Object> defaultObjectFactory) {
 ////         if(instance == null) {
 ////            throw new IllegalArgumentException("instance is void");
@@ -250,16 +250,16 @@
 ////                        .using(field)
 ////                        .initialize(ai));
 ////      }
-////      
+////
 ////      public void autoInitialize() {
 ////         Builder<AnnotatedInvoker<?,?,?>> streamBuilder = Stream.builder();
-////         
+////
 ////         streamBuilder.add(new ThisInvoker<Object>(this.objectFactory))
 ////                   .add(new ThatInvoker<Object>(this.objectFactory));
 ////         if(this.objectFactory instanceof ComparableTestObjectFactory ) {
 ////            ComparableTestObjectFactory<Object> compF = (ComparableTestObjectFactory<Object>) this.objectFactory;
 ////            streamBuilder.add(new LessThenInvoker<Object>(compF))
-////                      .add(new GreaterThenInvoker<Object>(compF));         
+////                      .add(new GreaterThenInvoker<Object>(compF));
 ////         }
 ////
 ////         streamBuilder.build()
@@ -284,14 +284,14 @@
 ////            }
 ////
 ////         }
-////         
+////
 ////         Builder<Class<? extends Annotation>> streamBuilder = Stream.builder();
 ////         streamBuilder.add(This.class);
 ////         streamBuilder.add(That.class);
 ////         streamBuilder.add(LessThen.class);
 ////         streamBuilder.add(GreaterThen.class);
-////         
-////         
+////
+////
 ////         Class<Annotation>[] annotations = streamBuilder.build().toArray(Class[]::new);
 ////         StringBuilder msg = ct.mutualExclusive(annotations).reduce(new StringBuilder(""), (builder, s) -> new StringBuilder(builder).append("The field '").append(s).append("' may only hava @This or @That or @LessThen or @GreaterThen, but not a combination. \n\t"),
 ////                 (builder1, builder2) -> new StringBuilder(builder1).append(builder2));
@@ -300,10 +300,10 @@
 ////            throw new IllegalStateException(msg.toString());
 ////         }
 ////      }
-////      
+////
 ////   }
-////   
-//   
+////
+//
 ////   private static class ClassTool {
 ////      private static Logger log = Logger.getLogger(ClassTool.class.getName());
 ////      private final Class<?> target;
@@ -344,7 +344,7 @@
 ////         Field[] fields = clazz.getDeclaredFields();
 ////         for (Field field : fields) {
 ////            int modifiers = field.getModifiers();
-////            
+////
 ////            allFields.add(field);
 ////            log.fine("Adding instance field " + field.getName());
 //////            ClassProperty property = new ClassProperty(this.target, field);
@@ -364,11 +364,11 @@
 ////      public Stream<Field> fields(Class<? extends Annotation> annotationClass) {
 ////         return this.getInstanceFields().stream()
 ////               .filter(field -> field.isAnnotationPresent(annotationClass));
-////         
-////      }
-////      
 ////
-////      
+////      }
+////
+////
+////
 ////      public List<Field> findAllFields(
 ////            Class<? extends Annotation> annotationClass) {
 ////         return this.allFields.stream()
@@ -428,7 +428,7 @@
 ////         return m;
 ////      }
 ////
-////      
+////
 ////      public final Stream<Field> mutualExclusive(Class<? extends Annotation>[] stream) {
 ////         Builder<Field> builder = Stream.builder();
 ////            List<Field> fields = this.getInstanceFields();
@@ -484,8 +484,8 @@
 //////      }
 ////
 ////   }
-////   
-//   
+////
+//
 ////   private static class ClassProperty {
 ////
 ////      private final Method setMethod;
@@ -562,10 +562,10 @@
 ////         }
 ////         if (method.getReturnType() != boolean.class) {
 ////            throw new IllegalArgumentException("has method must have a boolean return type");
-////         } 
+////         }
 ////         this.hasMethod = method;
 ////      }
-////      
+////
 ////      public boolean isWriteOnly() {
 ////         return this.getMethod == null && hasSetMethod();
 ////      }
@@ -587,9 +587,9 @@
 ////         if (hasSetMethod()) {
 ////            // setten bij method
 ////            this.setMethod.setAccessible(true);
-////          
+////
 ////            this.setMethod.invoke(instance, ding);
-////          
+////
 ////         } else {
 ////            // set by field
 ////            field.setAccessible(true);
@@ -619,24 +619,24 @@
 ////            field.setAccessible(true);
 ////            Object instanceValue = field.get(instance);
 ////            returnValue = instanceValue != null;
-////         }  
+////         }
 ////         return returnValue;
 ////      }
 ////      public String getName() {
 ////         return this.field.getName();
-////      }   
-////      
+////      }
+////
 ////      //private static Logger log = Logger.getLogger(GetSetRunner.class.getName());
 ////      /**
 ////       * optional is using validation or the identity. Id is optional also
-////       * 
+////       *
 ////       * @return
 ////       */
 ////      public boolean isOptional() {
 ////         return FieldTypeValidator.isOptional(field);
 ////      }
 //////      public boolean isNotOptionalByValidationFramework() {
-//////         return this.field.isAnnotationPresent(NotNull.class); 
+//////         return this.field.isAnnotationPresent(NotNull.class);
 //////      }
 ////      public Method getGetMethod() {
 ////         return getMethod;
@@ -645,7 +645,7 @@
 ////      public Method getSetMethod() {
 ////         return setMethod;
 ////      }
-////      
+////
 ////      public boolean hasHasMethod() {
 ////         return this.hasMethod != null;
 ////      }
@@ -657,7 +657,7 @@
 ////      }
 ////      /**
 ////       * Uses the SPI to set the value.
-////       * 
+////       *
 ////       * @return
 ////       * @throws InvocationTargetException
 ////       * @throws IllegalAccessException
@@ -675,9 +675,9 @@
 ////      }
 ////
 ////   }
-////   
-//   
-//   
+////
+//
+//
 ////   private static interface Invoker<T> {
 ////      T create(Class<?> type);
 ////   }
@@ -695,7 +695,7 @@
 ////         this.annotation = annotation;
 ////         this.override = override;
 ////      }
-////      
+////
 ////      public final Class<A> getAnnotation() {
 ////         return annotation;
 ////      }
@@ -706,10 +706,10 @@
 ////      protected F getOverride() {
 ////         return override;
 ////      }
-////      
+////
 ////      protected abstract T createOverride();
 ////      protected abstract T doCreate(Class<?> type);
-////      
+////
 ////      public final T create(Class<?> type) {
 ////         T result;
 ////         if(hasOverride() && this.override.isTypeFor(type)) {
@@ -738,7 +738,7 @@
 ////
 ////   }
 ////   private static final class LessThenInvoker<T> extends AnnotatedInvoker<LessThen, T,ComparableTestObjectFactory<T>>{
-////      
+////
 ////      public LessThenInvoker(ComparableTestObjectFactory<T> override) {
 ////         super(LessThen.class, override);
 ////      }
@@ -774,7 +774,7 @@
 ////
 ////   }
 ////   private static final class ThisInvoker<T> extends AnnotatedInvoker<This, T, TestObjectFactory<T>>{
-////      
+////
 ////      public ThisInvoker(TestObjectFactory<T> override) {
 ////         super(This.class, override);
 ////      }
@@ -792,11 +792,11 @@
 ////      }
 ////
 ////   }
-//   
+//
 ////   private static  interface InitializerBuilder {
 ////      InstanceFieldInitializer initialize(Invoker<?> invoker);
 ////   }
-//   
+//
 ////   private static interface FieldBuilder {
 ////      InitializerBuilder using(Field field);
 ////   }
@@ -808,7 +808,7 @@
 ////      private InstanceFieldInitializer() {
 ////      }
 ////
-////      
+////
 ////      public void invoke()  {
 ////         field.setAccessible(true);
 ////         try {

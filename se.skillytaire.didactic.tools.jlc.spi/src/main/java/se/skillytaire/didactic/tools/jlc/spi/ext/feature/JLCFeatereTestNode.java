@@ -8,57 +8,64 @@ import se.skillytaire.didactic.tools.jlc.spi.model.structure.CompositeTestNode;
 import se.skillytaire.didactic.tools.jlc.spi.model.structure.JLCSingleTestNode;
 import se.skillytaire.didactic.tools.jlc.spi.model.structure.JLCTestNode;
 
-public interface JLCFeatereTestNode<T> extends CompositeTestNode<T>{
+/**
+ * The JLCFeatereTestNode describes every node that is used as an extension
+ * point directly in the JLC builder.
+ *
+ * @param <T>
+ */
+public interface JLCFeatereTestNode<T> extends CompositeTestNode<T>, BuildableTestNode {
+	
+	
 	/**
 	 * Determines the position in the features.
+	 * 
 	 * @return
 	 */
 	public int getWeight();
+
 	/**
 	 * Checks if the node contains an executable test in the structure.
+	 * 
 	 * @return
 	 */
 	public default boolean hasExecutableTest() {
 		return hasExecutableTest(this);
 
 	}
-	
+
 	public static <T> boolean hasExecutableTest(JLCTestNode<T> node) {
 		boolean hasExecutableTest = false;
-		if(node instanceof JLCSingleTestNode) {
+		if (node instanceof JLCSingleTestNode) {
 			hasExecutableTest = true;
-		}else {
-			//meaning composite
+		} else {
+			// meaning composite
 			CompositeTestNode<T> composite = (CompositeTestNode<T>) node;
 			for (JLCTestNode<T> child : composite) {
 				hasExecutableTest = hasExecutableTest(child);
-				if(hasExecutableTest) {
+				if (hasExecutableTest) {
 					break;
 				}
 			}
 		}
 		return hasExecutableTest;
 	}
-	
-	
-	void build();
+
 	public void peek();
-	
+
 	/**
 	 * The uri for this node.
 	 * 
 	 * @return
 	 */
 	@Override
-	default public  Optional<URI> toUri() {
+	default public Optional<URI> toUri() {
 		URI uri = null;
 		Class<?> declaringClass = getClass();
-		
+
 		StringBuilder builder = new StringBuilder();
 //append(type.getName()).append('#')
-		builder.append("method:")
-		.append(declaringClass.getName())
-		.append("#getDisplayName()");
+		builder.append("method:").append(declaringClass.getName()).append("#getDisplayName()");
 		URI result = null;
 		try {
 			result = new URI(builder.toString());
@@ -69,4 +76,11 @@ public interface JLCFeatereTestNode<T> extends CompositeTestNode<T>{
 
 		return Optional.ofNullable(uri);
 	}
+	/**
+	 * Checks if this is enabled
+	 * @return
+	 */
+   public boolean isEnabled();
+   
+   public boolean isArchetyped();
 }

@@ -31,6 +31,10 @@ public class ClassTool {
     public List<ClassProperty> getProperties() {
        return properties;
     }
+    
+    public Stream<ClassProperty> properties(){
+    	return properties.stream();
+    }
 
     private void findInstanceFields(Class<?> clazz) {
        Field[] fields = clazz.getDeclaredFields();

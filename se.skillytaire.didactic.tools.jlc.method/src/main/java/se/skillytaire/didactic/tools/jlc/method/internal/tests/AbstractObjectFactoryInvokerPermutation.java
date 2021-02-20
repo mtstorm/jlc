@@ -116,13 +116,13 @@ TestPartObjectFactory<T, R>
 			}
 
 			@Override
-			public Class<T> type() {
+			public Class<?> type() {
 				return AbstractObjectFactoryInvokerPermutation.this.testFactory.type();
 			}
 
 			@Override
-			public boolean isTypeFor(Class<?> type) {
-				return AbstractObjectFactoryInvokerPermutation.this.testFactory.isTypeFor(type);
+			public boolean isFor(Class<?> type) {
+				return AbstractObjectFactoryInvokerPermutation.this.testFactory.isFor(type);
 			}
 		};
 
@@ -142,13 +142,13 @@ TestPartObjectFactory<T, R>
 		this.counter = RESET; 
 	}
 	@Override
-	public final Class<T> type() {
+	public final Class<?> type() {
 		return this.testFactory.type();
 	}
 
 	@Override
-	public final boolean isTypeFor(Class<?> type) {
-		return this.testFactory.isTypeFor(type);
+	public final boolean isFor(Class<?> type) {
+		return this.testFactory.isFor(type);
 	}
 	/**
 	 * Get the role name for the given index.

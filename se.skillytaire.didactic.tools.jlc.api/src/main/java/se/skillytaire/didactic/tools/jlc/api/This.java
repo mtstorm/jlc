@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
 /**
  * Injects the instance from the factory-method
  * {@code TestObjectFactory#createThis()} before a custom test has run.
- * 
+ *
  * @author Skillytaire
  *
  */

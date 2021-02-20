@@ -6,7 +6,6 @@ import se.skillytaire.didactic.tools.jlc.api.Archetype;
 import se.skillytaire.didactic.tools.jlc.api.JLCConfiguration;
 import se.skillytaire.didactic.tools.jlc.api.JLCConfigurationException;
 import se.skillytaire.didactic.tools.jlc.api.TestObjectFactory;
-import se.skillytaire.didactic.tools.jlc.spi.internal.JLCConfigurationImpl;
 
 public abstract class AbstractJLCTestNode<T> implements JLCTestNode<T> {
 
@@ -75,7 +74,7 @@ public abstract class AbstractJLCTestNode<T> implements JLCTestNode<T> {
 	 * 
 	 * @return
 	 */
-	protected final Class<T> type() {
+	protected final Class<?> type() {
 		return getObjectFactory().type();
 	}
 

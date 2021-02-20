@@ -11,6 +11,7 @@ import java.lang.annotation.Target;
 
 import org.junit.jupiter.api.DisplayName;
 
+import se.skillytaire.didactic.tools.jlc.api.TestGroup;
 import se.skillytaire.didactic.tools.jlc.api.TestOrder;
 
 /**
@@ -25,7 +26,7 @@ public @interface TestProperties {
 	public static final String PROPERTIES = "Properties";
 	public static final String OPTIONAL = "Optional";
 	public static final String REQUIRED = "Required";
-	public static final boolean GROUP = true;
+	//public static final TestGroup DEFAULT_GROUP = TestGroup.All;
 	   /**
 	    * Set the display name for the 'properties'-node . Defaults to 'Properties'.
 	    * @return the display name for all the 'properties'-node.
@@ -37,11 +38,11 @@ public @interface TestProperties {
 	TestOrder order() default @TestOrder();
 	boolean enabled() default true;
 	/**
-	 * When set to true, the properties will be grouped in required and optional properties.
-	 * 
+	 * When set to ALL, the properties will be grouped in required and optional properties.
+	 * When set to none, it will not group. other groupings will be this release be ignored.
 	 * @return
 	 */
-	boolean grouping() default GROUP;
+	TestGroup[] grouping() default {TestGroup.All};
 	
 	DisplayName optionalGroupName() default @DisplayName(OPTIONAL);
 	DisplayName requiredGroupName() default @DisplayName(REQUIRED);

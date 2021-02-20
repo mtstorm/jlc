@@ -12,7 +12,8 @@ import java.util.stream.Stream.Builder;
 
 import se.skillytaire.didactic.tools.jlc.api.Archetype;
 import se.skillytaire.didactic.tools.jlc.api.JLCConfiguration;
-import se.skillytaire.didactic.tools.jlc.api.TestConfiguration;
+import se.skillytaire.didactic.tools.jlc.spi.TestConfiguration;
+import se.skillytaire.didactic.tools.jlc.spi.e.JLCFeatureConfiguration;
 import se.skillytaire.didactic.tools.jlc.spi.model.structure.FolderTestNode;
 import se.skillytaire.didactic.tools.jlc.spi.model.structure.JLCTestNode;
 
@@ -24,7 +25,7 @@ import se.skillytaire.didactic.tools.jlc.spi.model.structure.JLCTestNode;
  * @param <N>
  * @param <T>
  */
-public class TestConfigurationNodeBuilder<N extends TestConfiguration<N, T>, T, S extends TestGroupConfiguration> {
+public class TestConfigurationNodeBuilder<D extends JLCFeatureConfiguration,N extends TestConfiguration<D,N, T>, T, S extends TestGroupConfiguration> {
 	private final HashMap<String, List<N>> features = new HashMap<>();
 	private final HashMap<Archetype, List<N>> archetypes = new HashMap<>();
 	/**

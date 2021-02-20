@@ -26,7 +26,7 @@ public final class BooleanTestObjectFactory implements TestObjectFactory<Boolean
 	}
 
 	@Override
-	public boolean isTypeFor(Class<?> type) {
+	public boolean isFor(Class<?> type) {
 		return BOOLEAN_TYPE.test(type);
 	}
 

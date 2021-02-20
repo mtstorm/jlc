@@ -11,58 +11,33 @@ import se.skillytaire.didactic.tools.jlc.spi.PredicateBuilder;
 
 
 public final class MethodSignature extends Signature implements Comparable<MethodSignature>{
-
-
-
-private Class<?> returnType;
+	private Class<?> returnType;
    
+	private Method method;
+	/**
+	 * Gets the underlaying method if it exist
+	 * @return null when this is not based on a method.
+	 */
+   public Method getMethod() {
+		return method;
+	}
 
-   
-   
-   
-//   public MethodSignature(TestMethod testMethod) {
-//	   this(testMethod.returnType(),testMethod.name(),testMethod.api(), testMethod.parameters());
-//   }
-   /**
+/**
     * After this has been invoked it is not considered an API call
     * @param method
     */
    public MethodSignature(Method method) {
       this(method.getDeclaringClass(), method.getReturnType(), method.getName(),false,
             method.getParameterTypes());
-//      Type returnType = method.getGenericReturnType();
-//    //  Class<?> currentClass = method.getDeclaringClass();
-//     
-//      if (returnType instanceof ParameterizedType) {
-//         ParameterizedType type = (ParameterizedType) returnType;
-//         Type[] typeArguments = type.getActualTypeArguments();
-//         if (typeArguments.length == 1) {
-//            Type typeArgument = typeArguments[0];
-//            
-//            if (getDeclaredClass().equals(typeArgument)) {
-//               this.returnType = currentClass;
-//               //System.out.println("JoJO  " + this);
-//            } else {
-//               //System.out.println("Grrr " + currentClass.getName());
-//            }
-//         } else {
-//            for (Type typeArgument : typeArguments) {
-//               Class<?> typeArgClass = (Class<?>) typeArgument;
-//               System.out.println("loop typeArgClass = " + typeArgClass);
-//            }
-//         }
-//      } else {
-//
-//      }
-     
+      this.method = method;
    }
 
    public MethodSignature(Class<?> declaringClass, Class<?> returnType, String name,boolean api,
                           Class<?>... paramTypes) {
       super(declaringClass, name, paramTypes);
       setApi(api);
-    
       this.returnType = returnType;
+   
    }
    
    public MethodSignature(Class<?> declaringClass, Class<?> returnType, String name,
@@ -92,19 +67,6 @@ private Class<?> returnType;
       builder.append(this.toString(true));
       return builder.toString();
    }
-//   public boolean matches(TestMethod obj) {
-//      boolean equals = false;
-//      if (obj != null) {
-//         if (this.getName().equals(obj.name())) {
-//            if (obj.returnType().isAssignableFrom(this.returnType)) {
-//               if (sameParameterSequence(obj.parameters())) {
-//                  equals = true;
-//               }
-//            }
-//         }
-//      }
-//      return equals;
-//   }
 
    /**
     * The basic predicate for the method

@@ -34,11 +34,7 @@ import se.skillytaire.didactic.tools.jlc.api.TestOrder;
 public @interface Lints {
 	public static final String LINTERS = "Linters";
 
-	/**
-	 * All the lint configurations
-	 * @return
-	 */
-	Lint[] value() default {};
+	boolean enabled() default true;
 	/**
 	 * Set the display name for the 'linters'-node (the root). 
 	 * When not set, the default name  'Linters' is used.
@@ -46,11 +42,22 @@ public @interface Lints {
 	 * @see #LINTERS
 	 */
 	DisplayName displayName() default @DisplayName(JLC.EMPTY);
+
+	
+	/**
+	 * @return
+	 */
+	boolean merge() default JLC.MERGE;
+
+	/**
+	 * All the lint configurations
+	 * @return
+	 */
+	Lint[] value() default {};
 	
    /**
     * The order of lints in the ui.
     * @return
     */
    TestOrder order() default @TestOrder();
-	boolean enabled() default true;
 }

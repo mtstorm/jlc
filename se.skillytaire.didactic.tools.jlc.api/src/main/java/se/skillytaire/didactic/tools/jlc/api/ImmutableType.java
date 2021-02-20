@@ -8,7 +8,11 @@ import java.lang.annotation.Target;
 
 /**
  * The immutable type marks the class under test as immutable.
- * <p>When an object factory is marked with this annotation then the created objects are considered immutable</p>
+ * <p>
+ * When an object factory is marked with this annotation then the created
+ * objects are considered immutable
+ * </p>
+ *
  * @author Skillytaire AB
  */
 @Retention(RetentionPolicy.RUNTIME)

@@ -18,7 +18,7 @@ public @interface JLCConfigurationTest {
 	/**
 	 * The test factories will be checked, should the layout be package based, or
 	 * flat packages.
-	 * 
+	 *
 	 * @return
 	 */
 	PackagePresentation layout() default PackagePresentation.FLAT;
@@ -26,7 +26,7 @@ public @interface JLCConfigurationTest {
 	/**
 	 * When thepayout is flat, use this separator between the node names. Defaults
 	 * '.' for the package separator.
-	 * 
+	 *
 	 * @return
 	 */
 	char separator() default '.';

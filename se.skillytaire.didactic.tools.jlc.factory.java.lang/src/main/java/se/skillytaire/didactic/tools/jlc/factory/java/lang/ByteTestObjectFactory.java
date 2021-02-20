@@ -20,10 +20,7 @@ public class ByteTestObjectFactory implements ComparableTestObjectFactory<Byte> 
 		return 13;
 	}
 
-	@Override
-	public boolean isTypeFor(Class<?> type) {
-		return Byte.class == type || Byte.TYPE == type;
-	}
+
 	public Class<?>[] types() {
 		return new Class[] { type(), Byte.TYPE };
 	}

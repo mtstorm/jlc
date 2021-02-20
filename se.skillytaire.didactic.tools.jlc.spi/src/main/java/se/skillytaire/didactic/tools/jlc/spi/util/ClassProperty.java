@@ -3,6 +3,8 @@ package se.skillytaire.didactic.tools.jlc.spi.util;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.stream.Stream;
+import java.util.stream.Stream.Builder;
 
 public final class ClassProperty {
 
@@ -193,5 +195,18 @@ public final class ClassProperty {
        return getType().isPrimitive();
     }
 
+    public Stream<Method> methods(){
+    	Builder<Method> elements = Stream.builder();
+    	if(hasGetMethod()) {
+    		elements.add(getGetMethod());
+    	}
+    	if(hasSetMethod()) {
+    		elements.add(getSetMethod());
+    	}  
+    	if(hasHasMethod()) {
+    		elements.add(getHasMethod());
+    	}  
+    	return elements.build();
+    }
  }
  

@@ -9,16 +9,19 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @Target(ElementType.TYPE)
+@Deprecated
 public @interface TestOrder {
-	
-	
+
 	/**
 	 * The order of the child nodes.
+	 *
 	 * @return default to compiler order
 	 */
 	TestDisplayOrder sort() default TestDisplayOrder.NONE;
+
 	/**
-	 * Should the sequence be inversed. 
+	 * Should the sequence be inversed.
+	 *
 	 * @return default to false
 	 */
 	boolean inverse() default false;

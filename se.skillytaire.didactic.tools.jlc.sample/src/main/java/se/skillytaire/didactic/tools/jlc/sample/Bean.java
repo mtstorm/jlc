@@ -3,13 +3,18 @@ package se.skillytaire.didactic.tools.jlc.sample;
 import java.io.Serializable;
 
 public class Bean implements Serializable{
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private String name;
 	private String surname;
+	private boolean enabled;
+	public boolean isEnabled() {
+		return enabled;
+	}
 
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
+	}
+	public Bean() {}
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -48,9 +53,9 @@ public class Bean implements Serializable{
 	public void setName(String name) {
 		this.name = name;
 	}
-	public void setName(String name, String harry) {
-		this.name = name;
-	}
+//	public void setName(String name, String harry) {
+//		this.name = name;
+//	}
 	public String getSurname() {
 		return surname;
 	}

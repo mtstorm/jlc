@@ -1,8 +1,5 @@
 package se.skillytaire.didactic.tools.jlc.spi.model.structure;
 
-import java.net.URI;
-import java.util.Optional;
-
 import se.skillytaire.didactic.tools.jlc.spi.model.naming.BasicDisplayName;
 import se.skillytaire.didactic.tools.jlc.spi.model.naming.DisplayName;
 

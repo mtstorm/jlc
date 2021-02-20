@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Assertions;
 
 import se.skillytaire.didactic.tools.jlc.api.Archetype;
 import se.skillytaire.didactic.tools.jlc.api.JLCConfiguration;
+import se.skillytaire.didactic.tools.jlc.lint.internal.TestLintersConfiguration;
 import se.skillytaire.didactic.tools.jlc.lint.spi.Linter;
 import se.skillytaire.didactic.tools.jlc.lint.spi.LinterFactory;
 import se.skillytaire.didactic.tools.jlc.lint.spi.model.config.TestLinterConfiguration;
@@ -18,7 +19,7 @@ import se.skillytaire.didactic.tools.jlc.spi.model.structure.AbstractConfigurati
  *
  * @param <T>
  */
-public final class LintTestNode<T> extends AbstractConfigurationTestNode<T, TestLinterConfiguration<T>> {
+public final class LintTestNode<T> extends AbstractConfigurationTestNode<T,TestLintersConfiguration, TestLinterConfiguration<T>> {
 
 	public LintTestNode(TestLinterConfiguration<T> config) {
 		super(config);
@@ -29,31 +30,7 @@ public final class LintTestNode<T> extends AbstractConfigurationTestNode<T, Test
 	@Override
 	public void init(JLCConfiguration<T> configuration) {
 		super.init(configuration); 
-		Optional<Linter<T>> optionalLinter = LinterFactory.find(getTestConfiguration());
-		if (optionalLinter.isPresent()) {
-			Linter<T> linter = optionalLinter.get();
-			
-			linter.enforce(getTestConfiguration());
-			Stream<FeatureTestNodeFactory<T>> structure = FeatureTestNodeFactory.factories(configuration);
-			// structure.forEach(System.out::println); 
-//			 System.out.println(structure.count());
-			structure
-			       // .peek(b -> System.out.println( "gevonden textory "+  b.getClass().getName()))
-					.map(f -> f.create())
-					.peek(n->n.applyFilter(linter.getArchetype()))
-					//.filter(n-> n.hasExecutableTest())
-					.peek(n->n.init(configuration))
-					.peek(n->n.build())
-				
-					.sorted(FeatureTestNodeFactory.getComperator()).forEach(this::add);
-					//peek(n -> n.applyFilter(getArchetype()))
-					//.peek(b -> System.out.println( "gevonden gg "+  b.getClass().getName())).forEach(this::add);
-		} else {
-			String msg = String.format("There is no linter found for achetype '%s', make sure it is in your classpath",
-					getArchetype().getName());
 
-			Assertions.fail(msg);
-		}
 	}
 
 	private Archetype getArchetype() {
@@ -70,4 +47,44 @@ public final class LintTestNode<T> extends AbstractConfigurationTestNode<T, Test
 //	protected Optional<TestConfiguration<T>> enforce(ConstructorSignature<T> constructor){
 //		return getConfiguration().enfoce(constructor, getArchetype());
 //	}
+
+	@Override
+	public void build() {
+		Optional<Linter<T>> optionalLinter = LinterFactory.find(getTestConfiguration());
+		if (optionalLinter.isPresent()) {
+			Linter<T> linter = optionalLinter.get();
+			linter.enforce(getTestConfiguration());
+			linter.features()
+            .peek(n->n.init(getConfiguration()))
+            .peek(n->n.build())
+            .peek(System.out::println)
+            .filter(n->n.hasChildren())
+            .sorted(FeatureTestNodeFactory.getComperator())
+            .peek(n-> System.out.println("Node in linter "+ n.getDisplayName().toString()))
+            .forEach(this::add);
+			
+			System.out.println("Count "+ linter.features().count());
+			
+//			Stream<FeatureTestNodeFactory<T>> structure = FeatureTestNodeFactory.factories(getConfiguration());
+//			// structure.forEach(System.out::println); 
+////			 System.out.println(structure.count());
+//			structure
+//			       // .peek(b -> System.out.println( "gevonden textory "+  b.getClass().getName()))
+//					.map(f -> f.create())
+//					.peek(n->n.applyFilter(linter.getArchetype()))
+//					//.filter(n-> n.hasExecutableTest())
+//					.peek(n->n.init(getConfiguration()))
+//					.peek(n->n.build())
+//				
+//					.sorted(FeatureTestNodeFactory.getComperator()).forEach(this::add);
+//					//peek(n -> n.applyFilter(getArchetype()))
+//					//.peek(b -> System.out.println( "gevonden gg "+  b.getClass().getName())).forEach(this::add);
+		} else {
+			String msg = String.format("There is no linter found for achetype '%s', make sure it is in your classpath",
+					getArchetype().getName());
+
+			Assertions.fail(msg);
+		}
+		
+	}
 }

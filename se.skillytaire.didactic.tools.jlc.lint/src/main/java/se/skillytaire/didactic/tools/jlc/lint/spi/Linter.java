@@ -1,7 +1,10 @@
 package se.skillytaire.didactic.tools.jlc.lint.spi;
 
+import java.util.stream.Stream;
+
 import se.skillytaire.didactic.tools.jlc.api.Archetype;
 import se.skillytaire.didactic.tools.jlc.lint.spi.model.config.TestLinterConfiguration;
+import se.skillytaire.didactic.tools.jlc.spi.ext.feature.JLCFeatereTestNode;
 
 /**
  * Linting is normally the automated checking of source code for programmatic
@@ -23,6 +26,9 @@ public interface Linter<T> {
 	 * @param testConfiguration
 	 */
 	void enforce(TestLinterConfiguration<T> testConfiguration);
-	
-
+	/**
+	 * Get the feature nodes that are enabled for this linter.
+	 * @return
+	 */
+	Stream<JLCFeatereTestNode<T>> features();
 }

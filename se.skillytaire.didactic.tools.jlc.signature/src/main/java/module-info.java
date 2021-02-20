@@ -4,6 +4,7 @@ module se.skillytaire.didactic.tools.jlc.signature {
  //  requires se.skillytaire.didactic.tools.junit.core.spi.java.lang;
    requires transitive org.junit.jupiter.api;
    requires transitive se.skillytaire.didactic.tools.jlc.api;
+requires java.logging;
 
    
    exports se.skillytaire.didactic.tools.jlc.signature.spi;

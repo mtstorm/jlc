@@ -17,7 +17,7 @@
 		<maven.compiler.target>15</maven.compiler.target>
 		<maven.compiler.source>15</maven.compiler.source>
 		<root.package>${project.groupId}.${project.artifactId}</root.package>
-		<junit.version>5.7.0</junit.version>
+		<junit.version>5.8.0-M1</junit.version>
 		<pitest.maven.version>1.5.2</pitest.maven.version>
 		<checkstyle.config>${project.basedir}/src/maven/checkstyle.xml</checkstyle.config>
 		<checkstyle.maven.version>3.1.1</checkstyle.maven.version>
@@ -152,12 +152,16 @@
 		
 		<module>se.skillytaire.didactic.tools.jlc.signature</module>
 		<module>se.skillytaire.didactic.tools.jlc.constructor</module>
+	
 		<module>se.skillytaire.didactic.tools.jlc.method</module>
+		
 		<module>se.skillytaire.didactic.tools.jlc.lint</module>
+		
 		<module>se.skillytaire.didactic.tools.jlc.property</module>
+		
 		<module>se.skillytaire.didactic.tools.jlc.javabean</module>
 		
-		<!-- extention modules for other API's -->
+		<!-- extention modules for other API's  -->
 		<module>se.skillytaire.didactic.tools.jlc.jcip.annotations</module>
 		
 		<!-- Bill of materials -->

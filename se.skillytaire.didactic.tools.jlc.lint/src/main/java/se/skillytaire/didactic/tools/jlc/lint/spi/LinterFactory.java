@@ -7,16 +7,15 @@ import java.util.ServiceLoader;
 import se.skillytaire.didactic.tools.jlc.api.Archetype;
 import se.skillytaire.didactic.tools.jlc.lint.spi.model.config.TestLinterConfiguration;
 import se.skillytaire.didactic.tools.jlc.spi.model.structure.JLCTestNode;
-
+/**
+ * The linter factory will create a linter for a given archetype.
+ *
+ * @param <T>
+ */
 public interface LinterFactory<T> {
-//	/**
-//	 * When detected the lint will be included in the test.
-//	 * In the implementation you can register your tests for your archetype.
-//	 * @param configuration The configuration
-//	 * @return the archetype to enable, or empty when not detected.
-//	 */
-//	Optional<Archetype> detect(JLCConfiguration<T> configuration);
+
 	Linter<T> create();
+	
 	boolean matches(Archetype archetype);
 	
 	@SuppressWarnings("unchecked")
@@ -25,7 +24,7 @@ public interface LinterFactory<T> {
 			throw new IllegalArgumentException("config is void");
 		}
 
-		    Linter<T> result = null;
+		   Linter<T> result = null;
 			ClassLoader loader = Thread.currentThread().getContextClassLoader();
 			@SuppressWarnings("rawtypes")
 			ServiceLoader<LinterFactory> serviceLoader = ServiceLoader.load(LinterFactory.class,

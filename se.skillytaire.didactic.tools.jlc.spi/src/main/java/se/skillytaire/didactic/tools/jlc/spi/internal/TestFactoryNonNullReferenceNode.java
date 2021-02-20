@@ -4,9 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.net.URI;
 import java.util.Optional;
-import java.util.function.Function;
 
-import se.skillytaire.didactic.tools.jlc.api.TestObjectFactory;
 import se.skillytaire.didactic.tools.jlc.spi.model.naming.BasicDisplayName;
 import se.skillytaire.didactic.tools.jlc.spi.model.naming.DisplayName;
 import se.skillytaire.didactic.tools.jlc.spi.model.structure.AbstractJLCTestNode;

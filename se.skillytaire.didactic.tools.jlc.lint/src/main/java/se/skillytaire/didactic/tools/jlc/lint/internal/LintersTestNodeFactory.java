@@ -11,7 +11,7 @@ public class LintersTestNodeFactory<T> extends AbstractFeatureTestNodeFactory<T>
 
 	@Override
 	public JLCFeatereTestNode<T> create() {
-		return new TestLintersConfiguration<>();
+		return new TestLintersFeatereTestNode<>();
 	}
 
 	@Override

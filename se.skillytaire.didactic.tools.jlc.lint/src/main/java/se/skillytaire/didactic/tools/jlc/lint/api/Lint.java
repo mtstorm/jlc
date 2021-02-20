@@ -34,12 +34,7 @@ import se.skillytaire.didactic.tools.jlc.api.JLC;
 @Documented
 @Target(ElementType.TYPE)
 public @interface Lint {
-
-	/**
-	 * The name of the archetype of the linter to configure.
-	 * @return
-	 */
-	String archetype();
+	boolean enabled() default true;
 	/**
 	 * Set the display name for the 'lint'-node.
 	 * @return the display name for the 'lint'-node. 
@@ -47,5 +42,10 @@ public @interface Lint {
 	 */	
 	DisplayName displayName() default @DisplayName(JLC.EMPTY);
 	
-	boolean enabled() default true;
+	/**
+	 * The name of the archetype of the linter to configure.
+	 * @return
+	 */
+	String archetype();
+	
 }

@@ -2,10 +2,12 @@ package se.skillytaire.didactic.tools.jlc.spi.model.config;
 
 import se.skillytaire.didactic.tools.jlc.api.Archetype;
 import se.skillytaire.didactic.tools.jlc.api.JLCConfiguration;
-import se.skillytaire.didactic.tools.jlc.api.TestConfiguration;
+import se.skillytaire.didactic.tools.jlc.spi.TestConfiguration;
+import se.skillytaire.didactic.tools.jlc.spi.e.AbstractConfiguration;
+import se.skillytaire.didactic.tools.jlc.spi.e.JLCFeatureConfiguration;
 
-public abstract class AbstractTestConfiguration<N extends AbstractTestConfiguration<N,T>,T> implements TestConfiguration<N,T> {
-	private boolean enabled;
+public abstract class AbstractTestConfiguration<E extends JLCFeatureConfiguration, N extends AbstractTestConfiguration<E,N,T>,T> 
+	extends AbstractConfiguration implements TestConfiguration<E,N,T> {
 	private boolean inverted;
 	private Archetype archetype;
 
@@ -20,16 +22,22 @@ public abstract class AbstractTestConfiguration<N extends AbstractTestConfigurat
 	 */
 	private boolean declared;
 
-	private JLCConfiguration<T> parent;
+	private final JLCConfiguration<T> parent;
 	
-	private String displayNameValue;
-	
-	
-	protected AbstractTestConfiguration(JLCConfiguration<T> parent) {
+	private final E extentionDefaults;
+	@Override
+	public E getExtentionDefaults() {
+		return extentionDefaults;
+	}
+	protected AbstractTestConfiguration(JLCConfiguration<T> parent, E extentionDefaults) {
 		if(parent == null) {
 			throw new IllegalArgumentException("Parent configuration has not been set");
 		}
+		if(extentionDefaults == null) {
+			throw new IllegalArgumentException("Extention defaults  has not been set");
+		}
 		this.parent = parent;
+		this.extentionDefaults = extentionDefaults;
 	}
 	/**
 	 * The merge override this.
@@ -50,16 +58,7 @@ public abstract class AbstractTestConfiguration<N extends AbstractTestConfigurat
 	
 
 
-	public String getDisplayNameValue() {
-		return displayNameValue;
-	}
-	public boolean hasDisplayNameValue() {
-		return displayNameValue != null && !displayNameValue.trim().isEmpty();
-	}
 
-	public void setDisplayNameValue(String displayNameValue) {
-		this.displayNameValue = displayNameValue;
-	}
 
 
 	public String getFeature() {
@@ -84,19 +83,7 @@ public abstract class AbstractTestConfiguration<N extends AbstractTestConfigurat
 		this.inverted = inverted;
 	}
 
-	/**
-	 * @return the enabled
-	 */
-	public final boolean isEnabled() {
-		return enabled;
-	}
 
-	/**
-	 * @param enabled the enabled to set
-	 */
-	public final void setEnabled(boolean enabled) {
-		this.enabled = enabled;
-	}
 
 	@Override
 	public final Archetype getArchetype() {
@@ -151,7 +138,7 @@ public abstract class AbstractTestConfiguration<N extends AbstractTestConfigurat
 	public String toString() {
 		return String.format(
 				"%s [enabled=%s, inverted=%s, archetype=%s, feature=%s, enforced=%s, declared=%s,  displayNameValue=%s ",
-				getClass().getSimpleName(), enabled, inverted, archetype, feature, enforced, declared,  displayNameValue);
+				getClass().getSimpleName(), isEnabled(), inverted, archetype, feature, enforced, declared,  getDisplayNameValue());
 	}
 	
 	

@@ -8,14 +8,11 @@ import java.util.stream.Stream.Builder;
 
 import se.skillytaire.didactic.tools.jlc.api.ComparableTestObjectFactory;
 import se.skillytaire.didactic.tools.jlc.api.JLCConfiguration;
-import se.skillytaire.didactic.tools.jlc.api.JLCConfigurationTest;
-import se.skillytaire.didactic.tools.jlc.api.JLCTestFactory;
 import se.skillytaire.didactic.tools.jlc.api.Pooled;
 import se.skillytaire.didactic.tools.jlc.api.TestObjectFactory;
 import se.skillytaire.didactic.tools.jlc.spi.model.naming.BasicDisplayName;
 import se.skillytaire.didactic.tools.jlc.spi.model.naming.DisplayName;
 import se.skillytaire.didactic.tools.jlc.spi.model.structure.AbstractJLCCompositeTestNode;
-import se.skillytaire.didactic.tools.jlc.spi.model.structure.CompositeTestNode;
 import se.skillytaire.didactic.tools.jlc.spi.model.structure.FolderTestNode;
 
 public class TestObjectFactoryTestNode<T> extends AbstractJLCCompositeTestNode<T>{
@@ -51,7 +48,7 @@ public class TestObjectFactoryTestNode<T> extends AbstractJLCCompositeTestNode<T
 		super.init(configuration);
 
 		
-		if(factory.isTypeFor(Void.class)) {
+		if(factory.isFor(Void.class)) {
 			FolderTestNode<T> nullCheck = createFolder("null checks");
 			invokers()
 		       .map(p -> new TestFactoryNullReferenceNode<T>(p))

@@ -3,8 +3,18 @@ package se.skillytaire.didactic.tools.jlc.signature.spi;
 import java.lang.reflect.Constructor;
 
 public final class ConstructorSignature<T> extends Signature implements Comparable<ConstructorSignature<T>>{
+	private Constructor<T> constructor;
+	/**
+	 * Gets the underlaying constructor if it exist
+	 * @return null when this is not based on a constructor.
+	 */
+	public Constructor<T> getConstructor() {
+		return constructor;
+	}
+
 	public ConstructorSignature(Constructor<T> constructor) {
 		this(constructor.getDeclaringClass(),constructor.getParameterTypes());
+		this.constructor = constructor;
 	}
 
 	public ConstructorSignature(Class<?> declaringClass, Class<?>... paramTypes) {

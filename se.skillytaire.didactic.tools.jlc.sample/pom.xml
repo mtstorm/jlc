@@ -43,27 +43,34 @@
 				<groupId>se.skillytaire.didactic.tools.jlc</groupId>
 				<artifactId>constructor</artifactId>
 			</dependency>
+	 			<!--	
 			<dependency>
 				<groupId>se.skillytaire.didactic.tools.jlc</groupId>
 				<artifactId>method</artifactId>
 			</dependency>
+		-->
+		 
 			<dependency>
 				<groupId>se.skillytaire.didactic.tools.jlc</groupId>
 				<artifactId>lint</artifactId>
 			</dependency>
+			<!-- -->	
 			<dependency>
 				<groupId>se.skillytaire.didactic.tools.jlc</groupId>
 				<artifactId>javabean</artifactId>
 			</dependency>
+				
+							
 			<dependency>
 				<groupId>se.skillytaire.didactic.tools.jlc</groupId>
 				<artifactId>property</artifactId>
-			</dependency>							
+			</dependency>	
+		
 			<dependency>
 				<groupId>se.skillytaire.didactic.tools.jlc</groupId>
 				<artifactId>factory.java.lang</artifactId>
 			</dependency>			
-			
+			 
 
 	</dependencies>
 

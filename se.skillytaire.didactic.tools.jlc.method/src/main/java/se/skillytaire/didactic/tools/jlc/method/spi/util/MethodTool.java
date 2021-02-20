@@ -10,9 +10,12 @@ import java.util.logging.Logger;
 import java.util.stream.Stream;
 
 import se.skillytaire.didactic.tools.jlc.api.JLCConfiguration;
+import se.skillytaire.didactic.tools.jlc.method.internal.spi.TestMethodsConfiguration;
 import se.skillytaire.didactic.tools.jlc.method.spi.model.config.TestMethodConfiguration;
 import se.skillytaire.didactic.tools.jlc.signature.spi.MethodSignature;
-
+import se.skillytaire.didactic.tools.jlc.spi.array.ArrayBuilder;
+import se.skillytaire.didactic.tools.jlc.spi.array.UniqueArrayBuilder;
+@Deprecated
 public class MethodTool {
    private static final Logger log = Logger.getLogger(MethodTool.class.getName());
 	private MethodTool() {
@@ -52,44 +55,64 @@ public class MethodTool {
 			allInterfaces(parent, interfaceCollector);
 		}
 	}
+	
+	
+//	public static void getUniqueDeclaredMethods(Class<?> type) {
+//		
+//		UniqueArrayBuilder<Method> methods = new UniqueArrayBuilder<Method>();
+//		getDeclaredMethods(type, methods);
+//		
+//		
+//	}
+	
+//	private static void getDeclaredMethods(Class<?> type, UniqueArrayBuilder<Method> arrayBuilder) {
+//		Method[] declaredMethods = type.getDeclaredMethods();
+//		arrayBuilder.append(declaredMethods);
+//		if(type != Object.class) {
+//			getDeclaredMethods(type, arrayBuilder);
+//		}
+//	}
+	
 
-	/**
-	 * Get all the methods to test for a specific type. It will not include the
-	 * following methods since they are native of Java
-	 * 
-	 * @see MethodSignature#FINALIZE will not be included.
-	 * @see MethodSignature#GET_CLASS will not be included.
-	 * @see MethodSignature#NOTIFY will not be included.
-	 * @see MethodSignature#NOTIFY_ALL will not be included.
-	 * @see MethodSignature#WAIT will not be included.
-	 * @see MethodSignature#WAIT_TIMEOUT will not be included.
-	 * @see MethodSignature#WAIT_TIMEOUT_2 will not be included.
-	 * @param type
-	 * @return
-	 */
-	public static <T> Stream<TestMethodConfiguration<T>> getConcreteMethods(JLCConfiguration<T> parentConfig,Class<?> type) {
-
-		TreeSet<TestMethodConfiguration<T>> collector = new TreeSet<>();
-		inheritedDeclaredMethods(parentConfig,type, collector);
-		return collector.stream();
-	}
-
-	private static <T> void inheritedDeclaredMethods(JLCConfiguration<T> parentConfig, Class<?> type, Set<TestMethodConfiguration<T>> collector) {
-		Method[] methods = type.getDeclaredMethods();
-		for (Method method : methods) {
-			MethodSignature signature = new MethodSignature(method);
-			log.config(()-> signature.toString());
-			TestMethodConfiguration<T> conf = new TestMethodConfiguration<>(parentConfig,signature);
-			if(!collector.contains(conf)) {
-				collector.add(conf);
-				conf.setExecutor(method);
-			}
-		}
-		if(type != Object.class) {
-			Class<?> parentType = type.getSuperclass();
-			inheritedDeclaredMethods(parentConfig, parentType, collector);
-		}
-	}
+//	/**
+//	 * Get all the methods to test for a specific type. It will not include the
+//	 * following methods since they are native of Java
+//	 * 
+//	 * @see MethodSignature#FINALIZE will not be included.
+//	 * @see MethodSignature#GET_CLASS will not be included.
+//	 * @see MethodSignature#NOTIFY will not be included.
+//	 * @see MethodSignature#NOTIFY_ALL will not be included.
+//	 * @see MethodSignature#WAIT will not be included.
+//	 * @see MethodSignature#WAIT_TIMEOUT will not be included.
+//	 * @see MethodSignature#WAIT_TIMEOUT_2 will not be included.
+//	 * @param type
+//	 * @return
+//	 */
+//	public static <T> Stream<TestMethodConfiguration<T>> getConcreteMethods(JLCConfiguration<T> parentConfig,TestMethodsConfiguration defaults,Class<?> type) {
+//
+//		TreeSet<TestMethodConfiguration<T>> collector = new TreeSet<>();
+//		inheritedDeclaredMethods(parentConfig,defaults,type, collector);
+//		return collector.stream();
+//	}
+//
+//	
+//	
+//	private static <T> void inheritedDeclaredMethods(JLCConfiguration<T> parentConfig,TestMethodsConfiguration defaults, Class<?> type, Set<TestMethodConfiguration<T>> collector) {
+//		Method[] methods = type.getDeclaredMethods();
+//		for (Method method : methods) {
+//			MethodSignature signature = new MethodSignature(method);
+//			log.config(()-> signature.toString());
+//			TestMethodConfiguration<T> conf = new TestMethodConfiguration<>(parentConfig,defaults, signature);
+//			if(!collector.contains(conf)) {
+//				collector.add(conf);
+//				conf.setExecutor(method);
+//			}
+//		}
+//		if(type != Object.class) {
+//			Class<?> parentType = type.getSuperclass();
+//			inheritedDeclaredMethods(parentConfig,defaults, parentType, collector);
+//		}
+//	}
 
 //	/**
 //	 * Get the concrete methods declared by the type (filtering all the interface

@@ -10,19 +10,18 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream.Builder;
 
 import se.skillytaire.didactic.tools.jlc.api.JLCConfiguration;
+import se.skillytaire.didactic.tools.jlc.method.internal.spi.TestMethodsConfiguration;
 import se.skillytaire.didactic.tools.jlc.spi.model.config.BasicTestGroupConfiguration;
 import se.skillytaire.didactic.tools.jlc.spi.model.config.TestConfigurationNodeBuilder;
 import se.skillytaire.didactic.tools.jlc.spi.model.structure.FolderTestNode;
 import se.skillytaire.didactic.tools.jlc.spi.model.structure.JLCTestNode;
 //FIXME BasicTestGroupConfiguration is generic now, remove param
-public class TestMethodConfigurationNodeBuilder<T> extends TestConfigurationNodeBuilder<TestMethodConfiguration<T>,T,BasicTestGroupConfiguration>{
+public class TestMethodConfigurationNodeBuilder<T> extends TestConfigurationNodeBuilder<TestMethodsConfiguration, TestMethodConfiguration<T>,T,BasicTestGroupConfiguration>{
+	private HashMap<String, List<TestMethodConfiguration<T>>> overloaded = new HashMap<>();
+	private List<TestMethodConfiguration<T>> apis = new ArrayList<TestMethodConfiguration<T>>();
 	public TestMethodConfigurationNodeBuilder(BasicTestGroupConfiguration settings) {
 		super(settings);
 	}
-
-	private HashMap<String, List<TestMethodConfiguration<T>>> overloaded = new HashMap<>();
-	private List<TestMethodConfiguration<T>> apis = new ArrayList<TestMethodConfiguration<T>>();
-
 	
 	/**
 	 * 
@@ -60,6 +59,7 @@ public class TestMethodConfigurationNodeBuilder<T> extends TestConfigurationNode
 		}
 		return grouped;
 	}
+
 	private boolean addAPI(TestMethodConfiguration<T> config) {
 		boolean processed = false;
 		if(getSettings().groupApi() && config.getSignature().isApi()) {
@@ -68,9 +68,6 @@ public class TestMethodConfigurationNodeBuilder<T> extends TestConfigurationNode
 		}
 		return processed;
 	}
-	
-
-	
 	
 	@Override
 	protected void build(JLCConfiguration<T> rootConfiguration,
@@ -101,6 +98,4 @@ public class TestMethodConfigurationNodeBuilder<T> extends TestConfigurationNode
 		}
 		super.build(rootConfiguration, mapper, streamBuilder);
 	}
-
-
 }

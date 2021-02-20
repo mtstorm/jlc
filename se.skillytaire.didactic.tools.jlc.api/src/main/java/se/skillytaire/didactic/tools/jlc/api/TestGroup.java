@@ -1,8 +1,9 @@
 package se.skillytaire.didactic.tools.jlc.api;
+
 /**
  * When you have a huge number of methods, it can help to group them.
- * 
- * 
+ *
+ *
  */
 public enum TestGroup {
 	/**

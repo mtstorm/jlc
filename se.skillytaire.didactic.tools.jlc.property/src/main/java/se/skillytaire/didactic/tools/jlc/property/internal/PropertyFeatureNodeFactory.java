@@ -7,7 +7,7 @@ public class PropertyFeatureNodeFactory<T> extends AbstractFeatureTestNodeFactor
 
 	@Override
 	public JLCFeatereTestNode<T> create() {
-		return new TestPropertiesConfiguration<>();
+		return new TestPropertiesFeatereTestNode<>();
 	}
 
 }

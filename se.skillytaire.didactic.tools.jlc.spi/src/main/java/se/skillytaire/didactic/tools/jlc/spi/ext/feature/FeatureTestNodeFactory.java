@@ -43,7 +43,7 @@ public interface FeatureTestNodeFactory<T> {
 		Builder<FeatureTestNodeFactory<T>> result = Stream.builder();
 		for (FeatureTestNodeFactory<T> factory : serviceLoader) {
 			log.config("Feature test factory "+ factory.getClass().getName());
-			System.out.println("Featerure test factory "+ factory.getClass().getName());
+//			System.out.println("Featerure test factory "+ factory.getClass().getName());
 			if(factory.isEnabledFor(configuration)) {
 				result.add(factory);
 				log.config("Feature test factory "+ factory.getClass().getName() + " is enabled");

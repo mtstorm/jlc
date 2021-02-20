@@ -5,96 +5,95 @@ import java.util.Comparator;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+@Deprecated
 public final class TestOrderDescription implements Serializable, Comparable<TestOrderDescription> {
 
 	private static final long serialVersionUID = 1L;
 	private final TestDisplayOrder displayOrder;
 	private final boolean reversed;
-	
-	public TestOrderDescription(TestOrder testOrder) {
+
+	public TestOrderDescription(final TestOrder testOrder) {
 		this(testOrder.sort(), testOrder.inverse());
 	}
-	
+
 	public TestOrderDescription() {
 		this(TestDisplayOrder.NONE, false);
 	}
-	
-	private TestOrderDescription(TestDisplayOrder displayOrder, boolean reversed) {
+
+	private TestOrderDescription(final TestDisplayOrder displayOrder, final boolean reversed) {
 		this.displayOrder = displayOrder;
 		this.reversed = reversed;
 	}
 
 	@Override
 	public int hashCode() {
-		return 13 * displayOrder.hashCode() *(reversed ? 1231 : 1237);
+		return 13 * this.displayOrder.hashCode() * (this.reversed ? 1231 : 1237);
 	}
 
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(final Object obj) {
 		boolean equals = super.equals(obj);
-		if(!equals && obj instanceof TestOrderDescription) {
-			TestOrderDescription that = (TestOrderDescription) obj;
-			equals = this.compareTo(that) == 0;
+		if (!equals && obj instanceof TestOrderDescription) {
+			final TestOrderDescription that = (TestOrderDescription) obj;
+			equals = compareTo(that) == 0;
 		}
 
 		return equals;
 	}
-	
-	
+
 	@Override
 	public String toString() {
-		return String.format("TestOrderDescription [displayOrder=%s, reversed=%s]", displayOrder, reversed);
+		return String.format("TestOrderDescription [displayOrder=%s, reversed=%s]", this.displayOrder, this.reversed);
 	}
 
 	@Override
-	public int compareTo(TestOrderDescription that) {
-		int compareTo = this.getDisplayOrder().compareTo(that.getDisplayOrder());
-		if(compareTo == 0) {
-			compareTo = Boolean.compare(this.isReversed(), that.isReversed());
+	public int compareTo(final TestOrderDescription that) {
+		int compareTo = getDisplayOrder().compareTo(that.getDisplayOrder());
+		if (compareTo == 0) {
+			compareTo = Boolean.compare(isReversed(), that.isReversed());
 		}
 		return compareTo;
 	}
 
 	public TestDisplayOrder getDisplayOrder() {
-		return displayOrder;
+		return this.displayOrder;
 	}
 
 	public boolean isReversed() {
-		return reversed;
+		return this.reversed;
 	}
 
 	public boolean isEnabled() {
 		return !this.displayOrder.equals(TestDisplayOrder.NONE);
 	}
+
 	/**
-	 * When this is not enabled the description is used.
-	 * When this is enable
+	 * When this is not enabled the description is used. When this is enable
+	 *
 	 * @param description
 	 * @return
 	 */
-	public TestOrderDescription override(TestOrderDescription description) {
+	public TestOrderDescription override(final TestOrderDescription description) {
 		TestOrderDescription result;
-		if(isEnabled() && !description.isEnabled()) {
+		if (isEnabled() && !description.isEnabled()) {
 			result = this;
 		} else {
 			result = description;
 		}
 		return result;
 	}
-	
-	
-	
-	public <T extends Comparable<T>> Stream<T> apply(Stream<T> stream){
+
+	public <T extends Comparable<T>> Stream<T> apply(final Stream<T> stream) {
 		Stream<T> result;
-		Optional<Comparator<T>> comparator = create();
-		if(comparator.isPresent()) {
+		final Optional<Comparator<T>> comparator = create();
+		if (comparator.isPresent()) {
 			result = stream.sorted(comparator.get());
 		} else {
 			result = stream;
 		}
 		return result;
 	}
-	
+
 	public <T extends Comparable<T>> Optional<Comparator<T>> create() {
 		Comparator<T> comparator = null;
 
@@ -112,7 +111,5 @@ public final class TestOrderDescription implements Serializable, Comparable<Test
 
 		return Optional.ofNullable(comparator);
 	}
-
-
 
 }

@@ -11,13 +11,14 @@ import se.skillytaire.didactic.tools.jlc.api.Archetype;
 import se.skillytaire.didactic.tools.jlc.api.JLCConfiguration;
 import se.skillytaire.didactic.tools.jlc.constructor.api.TestConstructor;
 import se.skillytaire.didactic.tools.jlc.constructor.api.TestConstructors;
+import se.skillytaire.didactic.tools.jlc.constructor.internal.spi.TestConstructorsConfiguration;
 import se.skillytaire.didactic.tools.jlc.constructor.spi.util.ConstructorTool;
 import se.skillytaire.didactic.tools.jlc.constructor.spi.util.TestConstructorAnnotationTool;
 import se.skillytaire.didactic.tools.jlc.signature.spi.ConstructorSignature;
 import se.skillytaire.didactic.tools.jlc.signature.spi.MethodSignature;
 import se.skillytaire.didactic.tools.jlc.signature.spi.model.config.AbstractTestSignatureConfiguration;
 
-public class TestConstructorConfiguration<T> extends AbstractTestSignatureConfiguration<TestConstructorConfiguration<T>,T,ConstructorSignature<T>, Constructor<T>> {
+public class TestConstructorConfiguration<T> extends AbstractTestSignatureConfiguration<TestConstructorConfiguration<T>,T,ConstructorSignature<T>, Constructor<T>,TestConstructorsConfiguration> {
 
    private static final Logger log = Logger.getLogger(TestConstructorConfiguration.class.getName());
 	
@@ -25,8 +26,8 @@ public class TestConstructorConfiguration<T> extends AbstractTestSignatureConfig
 	 * Creates the configuration based on a test method annotation.
 	 * @param testConstructor
 	 */
-	public TestConstructorConfiguration(JLCConfiguration<T> parent,TestConstructor testConstructor, int globalMaxParameterCount) {
-		super(parent, TestConstructorAnnotationTool.of(parent.getBeanUnderTestType(),testConstructor) , testConstructor.dbc());
+	public TestConstructorConfiguration(JLCConfiguration<T> parent, TestConstructorsConfiguration defaults,  TestConstructor testConstructor, int globalMaxParameterCount) {
+		super(parent,defaults, TestConstructorAnnotationTool.of(parent.getBeanUnderTestType(),testConstructor) , testConstructor.dbc());
 		apply(testConstructor, globalMaxParameterCount);
 	
 	}
@@ -34,14 +35,14 @@ public class TestConstructorConfiguration<T> extends AbstractTestSignatureConfig
 	 * Creates the configuration based on a method signature.
 	 * @param testMethod
 	 */
-	public TestConstructorConfiguration(JLCConfiguration<T> parent,Constructor<T> constructor) {
-		super(parent,new ConstructorSignature<T>(constructor), IllegalArgumentException.class);
+	public TestConstructorConfiguration(JLCConfiguration<T> parent,TestConstructorsConfiguration defaults,Constructor<T> constructor) {
+		super(parent,defaults,new ConstructorSignature<T>(constructor), IllegalArgumentException.class);
 		setMaximalParameterCount(TestConstructors.DEFAULT_PARAM_COUNT);
 		setExecutor(constructor);
 	}
   
-	public TestConstructorConfiguration(JLCConfiguration<T> parent, ConstructorSignature<T> cs) {
-		super(parent,cs, IllegalArgumentException.class);
+	public TestConstructorConfiguration(JLCConfiguration<T> parent,TestConstructorsConfiguration defaults, ConstructorSignature<T> cs) {
+		super(parent,defaults,cs, IllegalArgumentException.class);
 		setMaximalParameterCount(TestConstructors.DEFAULT_PARAM_COUNT);
 	}
 	public boolean matches(TestConstructor obj) {

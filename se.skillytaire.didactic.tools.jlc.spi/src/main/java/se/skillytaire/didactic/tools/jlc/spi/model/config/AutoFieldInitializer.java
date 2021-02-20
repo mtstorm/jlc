@@ -13,7 +13,6 @@ import se.skillytaire.didactic.tools.jlc.spi.util.AnnotationTool;
 
 public abstract class AutoFieldInitializer<A extends Annotation> {
 	private final  Field field;
-	//private  Object instance;
 	private  JLCConfigurationImpl<?> configuration;
 	private  Class<A> annotationType;
 	private A annotation;

@@ -8,6 +8,7 @@ import java.lang.annotation.Target;
 
 import org.junit.jupiter.api.DisplayName;
 
+import se.skillytaire.didactic.tools.jlc.api.JLC;
 import se.skillytaire.didactic.tools.jlc.api.TestGroup;
 import se.skillytaire.didactic.tools.jlc.api.TestOrder;
 
@@ -16,6 +17,14 @@ import se.skillytaire.didactic.tools.jlc.api.TestOrder;
 @Target(ElementType.TYPE)
 
 public @interface TestMethods {
+	boolean enabled() default true;
+	/**
+	 * Set the display name for the 'methods'-node . Defaults to 'Methods'.
+	 * @return the display name for all the 'methods'-node.
+	 * @see #METHODS
+	 */	   
+	DisplayName displayName() default @DisplayName(METHODS);
+	
 	/**
 	 * Methods starting with '$' or '_' will be excluded. 
 	 */
@@ -29,10 +38,7 @@ public @interface TestMethods {
     */
    public static final boolean SIMPLE_NAME = true;
    
-   /**
-    * The default value for {@link #merge()} is {@value false}.
-    */
-   public static final boolean MERGE = false;
+   
    public static final String METHODS = "Methods";
    /**
     * When there are no test methods declared, 
@@ -40,13 +46,9 @@ public @interface TestMethods {
     * @return
     */
    TestMethod[] value() default {};
-   /**
-    * Set the display name for the 'methods'-node . Defaults to 'Methods'.
-    * @return the display name for all the 'methods'-node.
-    * @see #METHODS
-    */	
+ 
    
-   DisplayName displayName() default @DisplayName(METHODS);
+   
    
    String excludePattern() default  DEFAULT_EXCLUDE_PATTERN ;
 
@@ -58,7 +60,6 @@ public @interface TestMethods {
    
    int parameterCount() default DEFAULT_PARAM_COUNT;
    
-   boolean enabled() default true;
    
    /**
     * When enabled we try to group the methods.
@@ -84,5 +85,5 @@ public @interface TestMethods {
     * 
     * @return
     */
-   boolean merge() default MERGE;
+   boolean merge() default JLC.MERGE;
 }

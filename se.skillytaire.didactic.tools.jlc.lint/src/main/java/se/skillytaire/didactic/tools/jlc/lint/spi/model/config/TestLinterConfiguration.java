@@ -5,14 +5,21 @@ import java.util.Optional;
 
 import se.skillytaire.didactic.tools.jlc.api.Archetype;
 import se.skillytaire.didactic.tools.jlc.api.JLCConfiguration;
+import se.skillytaire.didactic.tools.jlc.lint.api.Lint;
+import se.skillytaire.didactic.tools.jlc.lint.internal.TestLintersConfiguration;
 import se.skillytaire.didactic.tools.jlc.spi.model.config.AbstractTestConfiguration;
 
-public class TestLinterConfiguration<T> extends AbstractTestConfiguration<TestLinterConfiguration<T>,T> implements Comparable<TestLinterConfiguration<T>>{
-	
-	public TestLinterConfiguration(JLCConfiguration<T> parent, Archetype archetype) {
-		super(parent);
+public class TestLinterConfiguration<T> 
+
+extends AbstractTestConfiguration<TestLintersConfiguration,  TestLinterConfiguration<T>,T> implements Comparable<TestLinterConfiguration<T>>{
+   public TestLinterConfiguration(JLCConfiguration<T> parent,TestLintersConfiguration defaults, Lint lint) {
+      this(parent,defaults, Archetype.of(lint.archetype()));
+      this.setEnabled(lint.enabled());
+      this.setDeclared(true);
+   }	
+	public TestLinterConfiguration(JLCConfiguration<T> parent,TestLintersConfiguration defaults, Archetype archetype) {
+		super(parent,defaults);
 		setArchetype(archetype);
-		
 	}
 
 	@Override

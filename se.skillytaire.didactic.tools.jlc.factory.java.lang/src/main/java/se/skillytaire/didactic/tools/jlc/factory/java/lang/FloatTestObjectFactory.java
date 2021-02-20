@@ -18,10 +18,7 @@ public class FloatTestObjectFactory implements ComparableTestObjectFactory<Float
 		return 13.13F;
 	}
 
-	@Override
-	public boolean isTypeFor(Class<?> type) {
-		return Float.class == type || Float.TYPE == type;
-	}
+
 	public Class<?>[] types() {
 		return new Class[] { type(), Float.TYPE };
 	}

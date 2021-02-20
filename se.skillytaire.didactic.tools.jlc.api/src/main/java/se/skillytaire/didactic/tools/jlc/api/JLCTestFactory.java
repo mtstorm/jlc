@@ -8,6 +8,13 @@ import java.lang.annotation.Target;
 
 import org.junit.jupiter.api.DisplayName;
 
+/**
+ * Use this annotation on the test factory implementation. JLC is able to also
+ * test your factory implementation. This annotation allows you to beautify the
+ * structure of these tests.
+ *
+ *
+ */
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @Target(ElementType.TYPE)
@@ -19,7 +26,7 @@ public @interface JLCTestFactory {
 	 * The JLC tests for factories can be organized having a path. The root is an
 	 * empty. Use absolute paths for this, for example {@linkplain /java/lang} of
 	 * {@linkplain /model}
-	 * 
+	 *
 	 * @return
 	 */
 	String path() default JLC.EMPTY;
@@ -27,7 +34,7 @@ public @interface JLCTestFactory {
 	/**
 	 * Set the display name for the for this factory. Defaults to 'the name of the
 	 * class'.
-	 * 
+	 *
 	 * @return the display name
 	 * @see
 	 */
@@ -35,7 +42,7 @@ public @interface JLCTestFactory {
 
 	/**
 	 * Should this factory be used, defaults to true.
-	 * 
+	 *
 	 * @return
 	 */
 	boolean enabled() default true;
@@ -43,7 +50,7 @@ public @interface JLCTestFactory {
 //	/**
 //	 * Sometime there is pooling like Boolean Integer String. When set to true, the
 //	 * auto tests will use reference equals in there test.
-//	 * 
+//	 *
 //	 * @return
 //	 */
 //	boolean pooled() default false;
